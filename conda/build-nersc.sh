@@ -14,9 +14,9 @@ export BUILD_ID_DATE=`echo "$(date "+%F-%M-%S")"`
 export CI_COMMIT_REF_NAME=prod
 export CI_PIPELINE_ID=$BUILD_ID_DATE
 
-commonIntBuildDir=/global/common/software/lsst/gitlab/desc_mcp_env-int
-commonDevBuildDir=/global/common/software/lsst/gitlab/desc_mcp_env-dev
-commonProdBuildDir=/global/common/software/lsst/gitlab/desc_mcp_env-prod
+commonIntBuildDir=/global/common/software/lsst/gitlab/desc_forecasts_env-int
+commonDevBuildDir=/global/common/software/lsst/gitlab/desc_forecasts_env-dev
+commonProdBuildDir=/global/common/software/lsst/gitlab/desc_forecasts_env-prod
 
 
 if [ "$CI_COMMIT_REF_NAME" = "integration" ];  # integration
