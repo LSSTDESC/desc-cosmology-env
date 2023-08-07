@@ -40,9 +40,9 @@ then
 fi
 
 mkdir -p $curBuildDir
-cp conda/packlist.txt $curBuildDir
+#cp conda/packlist.txt $curBuildDir
 cp conda/post-conda-build.sh $curBuildDir
-cp conda/piplist.txt $curBuildDir
+#cp conda/piplist.txt $curBuildDir
 cp nersc/setup_forecasts_env.sh $curBuildDir
 cp nersc/sitecustomize.py $curBuildDir
 sed -i 's|$1|'$curBuildDir'|g' $curBuildDir/setup_forecasts_env.sh
@@ -51,31 +51,41 @@ cd $curBuildDir
 
 # Build Steps
 
-mamba install -c conda-forge -y mpich=4.3.*=external_*
+# Try Mambaforge latest
+url="https://github.com/conda-forge/miniforge/releases/latest/download"
+url="$url/Mambaforge-Linux-x86_64.sh"
+curl -LO "$url"
 
-mamba install -c conda-forge -y --file ./packlist.txt
-pip install --no-cache-dir -r ./piplist.txt
+bash ./Mambaforge-Linux-x86_64.sh -b -p $curBuildDir/py
+source $curBuildDir/py/etc/profile.d/conda.sh
+conda activate base
+
+mamba install -c conda-forge -y mpich=4.0.3=external_* 
+
+# Install firecrown in dev mode this will pull in CCL,cobaya, cosmosis
+git clone https://github.com/LSSTDESC/firecrown.git
+conda env update --name desc-forecasts -f firecrown/environment.yml
+source ${CONDA_PREFIX}/bin/cosmosis-configure
+# Download and build the CosmoSIS standard library
+# in a directory under the CosmoSIS python directory
+cosmosis-build-standard-library 
+#-i
+
+conda env config vars set CSL_DIR="${PWD}/cosmosis-standard-library" FIRECROWN_DIR="${PWD}/firecrown" PYTHONPATH="${PWD}/firecrown/build/lib"
+
+#mamba install -c conda-forge -y --file ./packlist.txt
+#pip install --no-cache-dir -r ./piplist.txt
 
 conda clean -y -a 
 
 
-
-# Grab firecrown source so we have the examples subdirectory
-#firecrown_ver=$(conda list firecrown | grep firecrown|tr -s " " | cut -d " " -f 2)
-#echo $firecrown_ver
-#curl -LO https://github.com/LSSTDESC/firecrown/archive/refs/tags/v$firecrown_ver.tar.gz
-#tar xvzf v$firecrown_ver.tar.gz
-## Set up a common directory name without version info to set FIRECROWN_DIR more easily
-#ln -s firecrown-$firecrown_ver firecrown
-
 # Additional build steps
-bash ./post-conda-build.sh
+#bash ./post-conda-build.sh
 
 
 python -m compileall $curBuildDir
 
-
-conda config --set env_prompt "(example-env-$1)" --system
+conda config --set env_prompt "(desc-forecasts-env-$1)" --system
 
 conda env export --no-builds > $curBuildDir/desc-forecasts-env-nersc-$CI_PIPELINE_ID-nobuildinfo.yml
 conda env export > $curBuildDir/desc-forecasts-nersc-$CI_PIPELINE_ID.yml
