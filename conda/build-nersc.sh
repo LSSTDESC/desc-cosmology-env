@@ -43,9 +43,9 @@ mkdir -p $curBuildDir
 cp conda/packlist.txt $curBuildDir
 cp conda/post-conda-build.sh $curBuildDir
 cp conda/piplist.txt $curBuildDir
-cp nersc/setup_example_env.sh $curBuildDir
+cp nersc/setup_forecasts_env.sh $curBuildDir
 cp nersc/sitecustomize.py $curBuildDir
-sed -i 's|$1|'$curBuildDir'|g' $curBuildDir/setup_example_env.sh
+sed -i 's|$1|'$curBuildDir'|g' $curBuildDir/setup_forecasts_env.sh
 cd $curBuildDir
 
 
@@ -61,12 +61,12 @@ conda clean -y -a
 
 
 # Grab firecrown source so we have the examples subdirectory
-firecrown_ver=$(conda list firecrown | grep firecrown|tr -s " " | cut -d " " -f 2)
-echo $firecrown_ver
-curl -LO https://github.com/LSSTDESC/firecrown/archive/refs/tags/v$firecrown_ver.tar.gz
-tar xvzf v$firecrown_ver.tar.gz
-# Set up a common directory name without version info to set FIRECROWN_DIR more easily
-ln -s firecrown-$firecrown_ver firecrown
+#firecrown_ver=$(conda list firecrown | grep firecrown|tr -s " " | cut -d " " -f 2)
+#echo $firecrown_ver
+#curl -LO https://github.com/LSSTDESC/firecrown/archive/refs/tags/v$firecrown_ver.tar.gz
+#tar xvzf v$firecrown_ver.tar.gz
+## Set up a common directory name without version info to set FIRECROWN_DIR more easily
+#ln -s firecrown-$firecrown_ver firecrown
 
 # Additional build steps
 bash ./post-conda-build.sh
@@ -77,8 +77,8 @@ python -m compileall $curBuildDir
 
 conda config --set env_prompt "(example-env-$1)" --system
 
-conda env export --no-builds > $curBuildDir/example_env-nersc-$CI_PIPELINE_ID-nobuildinfo.yml
-conda env export > $curBuildDir/example_env-nersc-$CI_PIPELINE_ID.yml
+conda env export --no-builds > $curBuildDir/desc-forecasts-env-nersc-$CI_PIPELINE_ID-nobuildinfo.yml
+conda env export > $curBuildDir/desc-forecasts-nersc-$CI_PIPELINE_ID.yml
 
 
 # Set permissions
