@@ -11,7 +11,7 @@ unset PYTHONPATH
 installFlag=$1
 
 export BUILD_ID_DATE=`echo "$(date "+%F-%M-%S")"`
-export CI_COMMIT_REF_NAME=prod
+export CI_COMMIT_REF_NAME=integration
 export CI_PIPELINE_ID=$BUILD_ID_DATE
 
 commonIntBuildDir=/global/common/software/lsst/gitlab/desc-forecasts-int
@@ -41,7 +41,7 @@ fi
 
 mkdir -p $curBuildDir
 #cp conda/packlist.txt $curBuildDir
-cp conda/post-conda-build.sh $curBuildDir
+#cp conda/post-conda-build.sh $curBuildDir
 #cp conda/piplist.txt $curBuildDir
 cp nersc/setup_forecasts_env.sh $curBuildDir
 cp nersc/sitecustomize.py $curBuildDir
@@ -60,6 +60,9 @@ bash ./Mambaforge-Linux-x86_64.sh -b -p $curBuildDir/py
 source $curBuildDir/py/etc/profile.d/conda.sh
 conda activate base
 
+conda create -y --name desc-forecasts
+conda activate desc-forecasts
+
 mamba install -c conda-forge -y mpich=4.0.3=external_* 
 
 # Install firecrown in dev mode this will pull in CCL,cobaya, cosmosis
@@ -72,6 +75,10 @@ cosmosis-build-standard-library
 #-i
 
 conda env config vars set CSL_DIR="${PWD}/cosmosis-standard-library" FIRECROWN_DIR="${PWD}/firecrown" PYTHONPATH="${PWD}/firecrown/build/lib"
+
+cd ${PWD}/firecrown
+python setup.py build
+python -m pytest -vv
 
 #mamba install -c conda-forge -y --file ./packlist.txt
 #pip install --no-cache-dir -r ./piplist.txt

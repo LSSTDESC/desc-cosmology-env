@@ -5,6 +5,11 @@ module load cpu
 module load cray-mpich-abi/8.1.25
 module load evp-patch
 
+export DESC_LSST_INSTALL_DIR=$1
+
+source $DESC_LSST_INSTALL_DIR/py/etc/profile.d/conda.sh
+conda activate desc-forecasts
+
 
 # For cosmosis and firecrown.  Should try to find a better way to set these
 #export CSL_DIR=$CONDA_PREFIX/lib/python3.10/site-packages/cosmosis/cosmosis-standard-library
