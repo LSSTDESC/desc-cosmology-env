@@ -148,6 +148,15 @@ conda env config vars set CSL_DIR="${PWD}/cosmosis-standard-library" FIRECROWN_D
 #cd TJPCov
 #python -m pip install .\[full\]
 
+#install TJPCov cclv3 branch
+cd $curBuildDir
+git clone https://github.com/LSSTDESC/TJPCov.git
+cd TJPCov
+git checkout cclv3
+python -m pip install -e .
+pytest -vv tests/test_covariance_gaussian_fsky.py
+
+
 cd $curBuildDir
 git clone https://github.com/LSSTDESC/augur.git
 pip install --no-deps augur/
