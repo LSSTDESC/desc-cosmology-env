@@ -112,6 +112,15 @@ pip install --no-deps augur/
 
 cd $curBuildDir
 
+#install data-registry
+git clone https://github.com/LSSTDESC/dataregistry.git
+cd dataregistry
+python3 -m pip install .
+
+cd $curBuildDir
+python3 -c "import dataregistry; print(dataregistry.__version__)"
+
+
 python -m compileall $curBuildDir/py
 conda clean -y -a 
 
