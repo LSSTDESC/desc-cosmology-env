@@ -36,6 +36,7 @@ then
 fi
 
 export DESC_FORECASTS=/global/cfs/cdirs/lsst/groups/MCP/forecasts
+export RUBIN_SIM_DATA_DIR=/dvs_ro/cfs/cdirs/lsst/groups/MCP/software/rubin_sim_data
 
 
 if [[ -z "$keepenv" ]] && [[ -z $SHIFTER_RUNTIME ]];

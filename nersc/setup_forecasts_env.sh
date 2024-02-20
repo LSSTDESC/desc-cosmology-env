@@ -2,7 +2,7 @@
 
 module load PrgEnv-gnu
 module load cpu
-module load cray-mpich-abi/8.1.25
+module load cray-mpich-abi
 module load evp-patch
 
 export DESC_LSST_INSTALL_DIR=$1
