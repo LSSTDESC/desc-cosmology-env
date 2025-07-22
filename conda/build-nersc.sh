@@ -2,8 +2,7 @@
 
 module load PrgEnv-gnu
 module load cpu
-module load cray-mpich-abi/8.1.28
-module load evp-patch
+module load cray-mpich-abi/8.1.30
 
 unset PYTHONPATH
 
@@ -52,72 +51,73 @@ cd $curBuildDir
 # Build Steps
 
 # Try Mambaforge latest
-url="https://github.com/conda-forge/miniforge/releases/latest/download"
-url="$url/Mambaforge-Linux-x86_64.sh"
+url="https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+#url="https://github.com/conda-forge/miniforge/releases/latest/download"
+#url="$url/Mambaforge-Linux-x86_64.sh"
 curl -LO "$url"
 
-bash ./Mambaforge-Linux-x86_64.sh -b -p $curBuildDir/py
+bash ./Miniforge3-Linux-x86_64.sh -b -p $curBuildDir/py
 source $curBuildDir/py/bin/activate
 #
 export PYTHONNOUSERSITE=1
 
-conda create -y --name desc-forecasts compilers
-conda activate desc-forecasts
+mamba clean --all -y
+export CONDA_PKGS_DIRS=$curBuildDir/pkgs
+
+conda create -y --name desc-firecrown-cosmosis compilers
+conda activate desc-firecrown-cosmosis
 
 python -m pip cache purge
 
-mamba install -c conda-forge -y mpich=4.1.2=external_* 
+mamba install -c conda-forge -y mpich=3.4.*=external_* 
  
 cd $curBuildDir
 
-# Install firecrown in dev mode this will pull in CCL,cobaya, cosmosis
-git clone https://github.com/LSSTDESC/firecrown.git
-#echo -e "\nmpich=4.1.2=external_*" >> firecrown/environment.yml
-mamba env update --name desc-forecasts -f firecrown/environment.yml
-conda activate desc-forecasts
-mamba install -c conda-forge -y mpich=4.1.2=external_* 
-source ${CONDA_PREFIX}/bin/cosmosis-configure
-cosmosis-build-standard-library
-
-export CSL_DIR=${PWD}/cosmosis-standard-library
-export FIRECROWN_DIR=${PWD}/firecrown
-export PYTHONPATH=${FIRECROWN_DIR}/build/lib
-
 mamba install -c conda-forge -y --file ./condapack.txt
-#
-cd firecrown
-python setup.py build
-python -m pytest -vv
+conda deactivate
+conda activate desc-firecrown-cosmosis
+# Install firecrown in dev mode this will pull in CCL,cobaya, cosmosis
+#git clone https://github.com/LSSTDESC/firecrown.git
+#echo -e "\nmpich=4.1.2=external_*" >> firecrown/environment.yml
+#mamba env update --name desc-forecasts -f firecrown/environment.yml
+#conda activate desc-forecasts
+#mamba install -c conda-forge -y mpich=4.1.2=external_* 
+conda env config vars set CSL_DIR=${CONDA_PREFIX}/cosmosis-standard-library
+cd ${CONDA_PREFIX}
+source ${CONDA_PREFIX}/bin/cosmosis-configure
+cosmosis-build-standard-library main
 
-cd $curBuildDir
+#export CSL_DIR=${PWD}/cosmosis-standard-library
+#export FIRECROWN_DIR=${PWD}/firecrown
+#export PYTHONPATH=${FIRECROWN_DIR}/build/lib
 
-conda env config vars set CSL_DIR="${PWD}/cosmosis-standard-library" FIRECROWN_DIR="${PWD}/firecrown" PYTHONPATH="${PWD}/firecrown/build/lib" AUGUR_DIR="${PWD}/augur" PYTHONNOUSERSITE=1
+
+#conda env config vars set CSL_DIR="${PWD}/cosmosis-standard-library" FIRECROWN_DIR="${PWD}/firecrown" PYTHONPATH="${PWD}/firecrown/build/lib" AUGUR_DIR="${PWD}/augur" PYTHONNOUSERSITE=1
 
 #pip install --no-cache-dir -r ./pippack.txt
 
 #install TJPCov cclv3 branch
-cd $curBuildDir
-git clone https://github.com/LSSTDESC/TJPCov.git
-cd TJPCov
-git checkout cclv3
-python -m pip install -e .
-pytest -vv tests/test_covariance_gaussian_fsky.py
+#cd $curBuildDir
+#git clone https://github.com/LSSTDESC/TJPCov.git
+#cd TJPCov
+#git checkout cclv3
+#python -m pip install -e .
+#pytest -vv tests/test_covariance_gaussian_fsky.py
 
 
 cd $curBuildDir
 git clone https://github.com/LSSTDESC/augur.git
-pip install --no-deps augur/
+export AUGUR_DIR=$PWD/augur
+cd augur
+python -m pip install --no-deps .
 #cd augur
 #python setup.py install
 
 cd $curBuildDir
 
 #install data-registry
-git clone https://github.com/LSSTDESC/dataregistry.git
-cd dataregistry
-python3 -m pip install .
+python -m pip install lsstdesc-dataregistry
 
-cd $curBuildDir
 python3 -c "import dataregistry; print(dataregistry.__version__)"
 
 

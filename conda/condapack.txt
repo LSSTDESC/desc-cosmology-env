@@ -1,5 +1,7 @@
+firecrown
 ipykernel
 jupyter
 namaster
+mpipy
 psycopg2
 rubin_sim

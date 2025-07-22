@@ -3,18 +3,22 @@
 module load PrgEnv-gnu
 module load cpu
 module load cray-mpich-abi
-module load evp-patch
+module load cudatoolkit
 
 export DESC_LSST_INSTALL_DIR=$1
 
-source $DESC_LSST_INSTALL_DIR/py/etc/profile.d/conda.sh
-conda activate desc-forecasts
+#source $DESC_LSST_INSTALL_DIR/py/etc/profile.d/conda.sh
+#conda activate desc-forecasts
+#
+source $DESC_LSST_INSTALL_DIR/bin/activate
+conda activate desc-firecrown-cosmosis
 
 
 # For cosmosis and firecrown.  Should try to find a better way to set these
 #export CSL_DIR=$CONDA_PREFIX/lib/python3.10/site-packages/cosmosis/cosmosis-standard-library
 #export FIRECROWN_SITE_PACKAGES=$CONDA_PREFIX/lib/python3.10/site-packages
-#export FIRECROWN_DIR=$DESC_LSST_INSTALL_DIR/firecrown
+export FIRECROWN_DIR=$CONDA_PREFIX/firecrown
+export AUGUR_DIR=$CONDA_PREFIX/augur
 #export FIRECROWN_EXAMPLES_DIR=$FIRECROWN_DIR/examples
 
 # Fixes missing support in the Perlmutter libfabric:
