@@ -6,7 +6,7 @@ wrapcosmosis() {
 }
 
 
-echo "RUNNING DESC_FORECASTS_ENV DEVELOPMENT VERSION"
+echo "RUNNING DESC_FORECASTS_ENV DEV VERSION"
 
 SCRIPT=${BASH_SOURCE[0]}
 
@@ -39,10 +39,10 @@ export DESC_FORECASTS=/global/cfs/cdirs/lsst/groups/MCP/forecasts
 export RUBIN_SIM_DATA_DIR=/dvs_ro/cfs/cdirs/lsst/groups/MCP/software/rubin_sim_data
 
 
-if [[ -z "$keepenv" ]] && [[ -z $SHIFTER_RUNTIME ]];
-then
-  module purge
-fi
+#if [[ -z "$keepenv" ]] && [[ -z $SHIFTER_RUNTIME ]];
+#then
+#  module purge
+#fi
 
 
 #if [ $shifterenv ] || [ $SHIFTER_RUNTIME ]
@@ -53,9 +53,9 @@ fi
 export DESC_FORECASTS_INSTALL=/global/common/software/lsst/gitlab/desc-forecasts-int/dev
 #source $DESC_FORECASTS_INSTALL/py/etc/profile.d/conda.sh
 #conda activate desc-forecasts
-source $DESC_FORECASTS_INSTALL/setup_forecasts_env.sh
+source $DESC_FORECASTS_INSTALL/setup_forecasts_env.sh $DESC_FORECASTS_INSTALL
     
-export PYTHONPATH=$PYTHONPATH:$DESC_FORECASTS_INSTALL
+#export PYTHONPATH=$PYTHONPATH:$DESC_FORECASTS_INSTALL
   
 wrapcosmosis
 
