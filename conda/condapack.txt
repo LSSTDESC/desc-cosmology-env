@@ -2,6 +2,6 @@ firecrown
 ipykernel
 jupyter
 namaster
-mpipy
+mpi4py
 psycopg2
 rubin_sim
