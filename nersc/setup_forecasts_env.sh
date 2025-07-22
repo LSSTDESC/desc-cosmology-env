@@ -7,8 +7,8 @@ module load cudatoolkit
 
 export DESC_LSST_INSTALL_DIR=$1
 
-#source $DESC_LSST_INSTALL_DIR/py/etc/profile.d/conda.sh
-#conda activate desc-forecasts
+#source $DESC_LSST_INSTALL_DIR/py/etc/profile.d/conda.sh  # Uncomment this line if using the older 'desc-forecasts' environment.
+#conda activate desc-forecasts  # Uncomment this line to activate the 'desc-forecasts' environment instead of 'desc-firecrown-cosmosis'.
 #
 source $DESC_LSST_INSTALL_DIR/bin/activate
 conda activate desc-firecrown-cosmosis
