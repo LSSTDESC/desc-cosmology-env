@@ -1,1 +1,1 @@
-# example_env
+# desc-cosmology-env

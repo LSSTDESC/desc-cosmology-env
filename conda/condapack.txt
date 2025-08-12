@@ -1,6 +1,7 @@
 firecrown
 ipykernel
 jupyter
+lsstdesc-smokescreen
 namaster
 mpi4py
 psycopg2
