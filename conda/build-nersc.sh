@@ -13,18 +13,18 @@ export BUILD_ID_DATE=`echo "$(date "+%F-%M-%S")"`
 export CI_COMMIT_REF_NAME=integration
 export CI_PIPELINE_ID=$BUILD_ID_DATE
 
-commonIntBuildDir=/global/common/software/lsst/gitlab/desc-forecasts-int
-commonDevBuildDir=/global/common/software/lsst/gitlab/desc-forecasts-dev
-commonProdBuildDir=/global/common/software/lsst/gitlab/desc-forecasts-prod
+commonIntBuildDir=/global/common/software/lsst/gitlab/desc-cosmology-int
+commonDevBuildDir=/global/common/software/lsst/gitlab/desc-cosmology-dev
+commonBuildDir=/global/common/software/lsst/gitlab/desc-cosmology
 
 
 if [ "$CI_COMMIT_REF_NAME" = "integration" ];  # integration
 then
-    curBuildDir=$commonIntBuildDir/$CI_PIPELINE_ID
+    curBuildDir=$commonBuildDir/$CI_PIPELINE_ID
     echo "Integration Install Build: " $curBuildDir
 elif [ "$CI_COMMIT_REF_NAME" = "dev" ];  # dev
 then
-    curBuildDir=$commonDevBuildDir/$CI_PIPELINE_ID
+    curBuildDir=$commonBuildDir/$CI_PIPELINE_ID
     echo "Dev Install Build: " $curBuildDir
 elif [[ "$installFlag" ]];  # Install Prod
 then
@@ -34,7 +34,7 @@ then
     else
         prodBuildDir=$CI_COMMIT_TAG
     fi
-    curBuildDir=$commonProdBuildDir/$prodBuildDir
+    curBuildDir=$commonBuildDir/$prodBuildDir
     echo "Prod Build: " $curBuildDir
 fi
 
@@ -42,9 +42,9 @@ mkdir -p $curBuildDir
 cp conda/condapack.txt $curBuildDir
 #cp conda/post-conda-build.sh $curBuildDir
 cp conda/pippack.txt $curBuildDir
-cp nersc/setup_forecasts_env.sh $curBuildDir
+cp nersc/setup-cosmology-env.sh $curBuildDir
 cp nersc/sitecustomize.py $curBuildDir
-sed -i 's|$1|'$curBuildDir'|g' $curBuildDir/setup_forecasts_env.sh
+sed -i 's|$1|'$curBuildDir'|g' $curBuildDir/setup-cosmology-env.sh
 cd $curBuildDir
 
 
@@ -62,8 +62,8 @@ export PYTHONNOUSERSITE=1
 mamba clean --all -y
 export CONDA_PKGS_DIRS=$curBuildDir/pkgs
 
-conda create -y --name desc-firecrown-cosmosis compilers
-conda activate desc-firecrown-cosmosis
+conda create -y --name desc-cosmology compilers
+conda activate desc-cosmology
 
 python -m pip cache purge
 
@@ -73,13 +73,7 @@ cd $curBuildDir
 
 mamba install -c conda-forge -y --file ./condapack.txt
 conda deactivate
-conda activate desc-firecrown-cosmosis
-# Install firecrown in dev mode this will pull in CCL,cobaya, cosmosis
-#git clone https://github.com/LSSTDESC/firecrown.git
-#echo -e "\nmpich=4.1.2=external_*" >> firecrown/environment.yml
-#mamba env update --name desc-forecasts -f firecrown/environment.yml
-#conda activate desc-forecasts
-#mamba install -c conda-forge -y mpich=4.1.2=external_* 
+conda activate desc-cosmology 
 conda env config vars set CSL_DIR=${CONDA_PREFIX}/cosmosis-standard-library
 cd ${CONDA_PREFIX}
 source ${CONDA_PREFIX}/bin/cosmosis-configure
@@ -92,7 +86,7 @@ cosmosis-build-standard-library main
 
 #conda env config vars set CSL_DIR="${PWD}/cosmosis-standard-library" FIRECROWN_DIR="${PWD}/firecrown" PYTHONPATH="${PWD}/firecrown/build/lib" AUGUR_DIR="${PWD}/augur" PYTHONNOUSERSITE=1
 
-#pip install --no-cache-dir -r ./pippack.txt
+pip install --no-cache-dir -r ./pippack.txt
 
 #install TJPCov cclv3 branch
 #cd $curBuildDir
@@ -113,11 +107,8 @@ python -m pip install --no-deps .
 
 cd $curBuildDir
 
-#install data-registry
 python -m pip install lsstdesc-dataregistry
-
 python3 -c "import dataregistry; print(dataregistry.__version__)"
-
 
 python -m compileall $curBuildDir/py
 conda clean -y -a 
@@ -125,10 +116,10 @@ conda clean -y -a
 # Additional build steps
 #bash ./post-conda-build.sh
 
-conda config --set env_prompt "(desc-forecasts-env-$1)" --env
+conda config --set env_prompt "(desc-cosmology-$1)" --env
 
-conda env export --no-builds > $curBuildDir/desc-forecasts-env-nersc-$CI_PIPELINE_ID-nobuildinfo.yml
-conda env export > $curBuildDir/desc-forecasts-nersc-$CI_PIPELINE_ID.yml
+conda env export --no-builds > $curBuildDir/desc-cosmology-nersc-$CI_PIPELINE_ID-nobuildinfo.yml
+conda env export > $curBuildDir/desc-cosmology-nersc-$CI_PIPELINE_ID.yml
 
 
 # Set permissions
