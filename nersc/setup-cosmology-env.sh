@@ -7,7 +7,7 @@ module load cudatoolkit
 
 export DESC_LSST_INSTALL_DIR=$1
 
-source $DESC_LSST_INSTALL_DIR/bin/activate
+source $DESC_LSST_INSTALL_DIR/py/bin/activate
 conda activate desc-cosmology
 
 # For cosmosis and firecrown.  Should try to find a better way to set these

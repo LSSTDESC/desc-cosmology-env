@@ -86,6 +86,7 @@ cosmosis-build-standard-library main
 
 #conda env config vars set CSL_DIR="${PWD}/cosmosis-standard-library" FIRECROWN_DIR="${PWD}/firecrown" PYTHONPATH="${PWD}/firecrown/build/lib" AUGUR_DIR="${PWD}/augur" PYTHONNOUSERSITE=1
 
+cd $curBuildDir
 pip install --no-cache-dir -r ./pippack.txt
 
 #install TJPCov cclv3 branch
@@ -98,7 +99,10 @@ pip install --no-cache-dir -r ./pippack.txt
 
 
 cd $curBuildDir
-git clone https://github.com/LSSTDESC/augur.git
+curl -LO https://github.com/LSSTDESC/augur/archive/refs/tags/1.1.2.tar.gz
+tar xvzf 1.1.2.tar.gz
+ln -s augur-1.1.2 augur
+#git clone https://github.com/LSSTDESC/augur.git
 export AUGUR_DIR=$PWD/augur
 cd augur
 python -m pip install --no-deps .
