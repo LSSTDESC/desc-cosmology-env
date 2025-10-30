@@ -68,6 +68,7 @@ conda activate desc-cosmology
 python -m pip cache purge
 
 mamba install -c conda-forge -y mpich=3.4.*=external_* 
+#mamba install -c conda-forge -y mpich=4.3.2=external_* 
  
 cd $curBuildDir
 
@@ -83,11 +84,19 @@ cosmosis-build-standard-library main
 #export FIRECROWN_DIR=${PWD}/firecrown
 #export PYTHONPATH=${FIRECROWN_DIR}/build/lib
 
+cd $curBuildDir
 
-#conda env config vars set CSL_DIR="${PWD}/cosmosis-standard-library" FIRECROWN_DIR="${PWD}/firecrown" PYTHONPATH="${PWD}/firecrown/build/lib" AUGUR_DIR="${PWD}/augur" PYTHONNOUSERSITE=1
+# could also find FIRECROWN DIR by doing
+# FIRECROWN_DIR=$(python -c "import firecrown; print('/'.join(firecrown.__spec__.submodule_search_locations[0].split('/')[0:-1]))") + "/firecrown"
+
+pip install --no-cache-dir -r ./pippack.txt
+
 
 cd $curBuildDir
-pip install --no-cache-dir -r ./pippack.txt
+FIRECROWN_VER=1.11.0
+curl -LO https://github.com/LSSTDESC/firecrown/archive/refs/tags/v$FIRECROWN_VER.tar.gz
+tar xvzf v$FIRECROWN_VER.tar.gz
+ln -s firecrown-$FIRECROWN_VER firecrown
 
 #install TJPCov cclv3 branch
 #cd $curBuildDir
@@ -99,9 +108,10 @@ pip install --no-cache-dir -r ./pippack.txt
 
 
 cd $curBuildDir
-curl -LO https://github.com/LSSTDESC/augur/archive/refs/tags/1.1.2.tar.gz
-tar xvzf 1.1.2.tar.gz
-ln -s augur-1.1.2 augur
+AUGUR_VER=1.1.1
+curl -LO https://github.com/LSSTDESC/augur/archive/refs/tags/$AUGUR_VER.tar.gz
+tar xvzf $AUGUR_VER.tar.gz
+ln -s augur-$AUGUR_VER augur
 #git clone https://github.com/LSSTDESC/augur.git
 export AUGUR_DIR=$PWD/augur
 cd augur
@@ -110,6 +120,12 @@ python -m pip install --no-deps .
 #python setup.py install
 
 cd $curBuildDir
+
+export FC_DIR=$(python -c "import firecrown; print('/'.join(firecrown.__spec__.submodule_search_locations[0].split('/')[0:-1]))")""
+
+export AG_DIR=$(python -c "import augur; print('/'.join(augur.__spec__.submodule_search_locations[0].split('/')[0:-1]))")""
+
+conda env config vars set CSL_DIR="${CONDA_PREFIX}/cosmosis-standard-library" FIRECROWN_DIR="${FC_DIR}" AUGUR_DIR="${AG_DIR}" PYTHONNOUSERSITE=1
 
 python -m pip install lsstdesc-dataregistry
 python3 -c "import dataregistry; print(dataregistry.__version__)"
