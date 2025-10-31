@@ -68,7 +68,6 @@ conda activate desc-cosmology
 python -m pip cache purge
 
 mamba install -c conda-forge -y mpich=3.4.*=external_* 
-#mamba install -c conda-forge -y mpich=4.3.2=external_* 
  
 cd $curBuildDir
 
@@ -93,31 +92,21 @@ pip install --no-cache-dir -r ./pippack.txt
 
 
 cd $curBuildDir
-FIRECROWN_VER=1.11.0
+FIRECROWN_VER=1.14.0
 curl -LO https://github.com/LSSTDESC/firecrown/archive/refs/tags/v$FIRECROWN_VER.tar.gz
 tar xvzf v$FIRECROWN_VER.tar.gz
 ln -s firecrown-$FIRECROWN_VER firecrown
 
-#install TJPCov cclv3 branch
-#cd $curBuildDir
-#git clone https://github.com/LSSTDESC/TJPCov.git
-#cd TJPCov
-#git checkout cclv3
-#python -m pip install -e .
-#pytest -vv tests/test_covariance_gaussian_fsky.py
-
-
 cd $curBuildDir
-AUGUR_VER=1.1.1
-curl -LO https://github.com/LSSTDESC/augur/archive/refs/tags/$AUGUR_VER.tar.gz
-tar xvzf $AUGUR_VER.tar.gz
-ln -s augur-$AUGUR_VER augur
+# Find latest tag
+git clone --depth 1 --branch "$(git ls-remote --tags --sort=-v:refname https://github.com/LSSTDESC/augur.git | grep -o 'refs/tags/[^{}]*' | head -n 1 | sed 's|refs/tags/||')" https://github.com/LSSTDESC/augur.git
+#AUGUR_VER=1.1.1
+##curl -LO https://github.com/LSSTDESC/augur/archive/refs/tags/$AUGUR_VER.tar.gz
+#tar xvzf $AUGUR_VER.tar.gz
+#ln -s augur-$AUGUR_VER augur
 #git clone https://github.com/LSSTDESC/augur.git
-export AUGUR_DIR=$PWD/augur
 cd augur
 python -m pip install --no-deps .
-#cd augur
-#python setup.py install
 
 cd $curBuildDir
 

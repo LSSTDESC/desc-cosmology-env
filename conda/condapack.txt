@@ -1,4 +1,4 @@
-firecrown==1.11.0
+firecrown
 ipykernel
 jupyter
 lsstdesc-smokescreen
