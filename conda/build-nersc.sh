@@ -67,7 +67,8 @@ conda activate desc-cosmology
 
 python -m pip cache purge
 
-mamba install -c conda-forge -y mpich=3.4.*=external_* 
+#mamba install -c conda-forge -y mpich=3.4.*=external_* 
+mamba install -c conda-forge -y mpich=4.3.2=external_* 
  
 cd $curBuildDir
 
@@ -114,7 +115,7 @@ export FC_DIR=$(python -c "import firecrown; print('/'.join(firecrown.__spec__.s
 
 export AG_DIR=$(python -c "import augur; print('/'.join(augur.__spec__.submodule_search_locations[0].split('/')[0:-1]))")""
 
-conda env config vars set CSL_DIR="${CONDA_PREFIX}/cosmosis-standard-library" FIRECROWN_DIR="${FC_DIR}" AUGUR_DIR="${AG_DIR}" PYTHONNOUSERSITE=1
+conda env config vars set CSL_DIR="${CONDA_PREFIX}/cosmosis-standard-library" FIRECROWN_DIR="${FC_DIR}" AUGUR_DIR="${AG_DIR}" 
 
 python -m pip install lsstdesc-dataregistry
 python3 -c "import dataregistry; print(dataregistry.__version__)"

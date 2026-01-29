@@ -4,7 +4,7 @@ jupyter
 lsstdesc-smokescreen
 namaster
 mpi4py
-mpich==3.4.*=external_*
+#mpich==3.4.*=external_*
 psycopg2
 rubin_sim
 tjpcov
