@@ -10,6 +10,9 @@ export DESC_LSST_INSTALL_DIR=$1
 source $DESC_LSST_INSTALL_DIR/py/bin/activate
 conda activate desc-cosmology
 
+# Need to allow --user installs
+export PYTHONNOUSERSITE=0
+
 # For cosmosis and firecrown.  Should try to find a better way to set these
 #export CSL_DIR=$CONDA_PREFIX/lib/python3.10/site-packages/cosmosis/cosmosis-standard-library
 #export FIRECROWN_SITE_PACKAGES=$CONDA_PREFIX/lib/python3.10/site-packages
