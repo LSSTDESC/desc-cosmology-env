@@ -1,5 +1,5 @@
 FROM ubuntu:22.04
-MAINTAINER Heather Kelly <heather@slac.stanford.edu>
+LABEL maintainer="Heather Kelly <heather@slac.stanford.edu>"
 
 #ARG DESC_PYTHON_DIR=/opt/desc
 ARG DESC_PYTHON_DIR=/usr/local
@@ -37,8 +37,8 @@ USER lsst
 
 ENV PYTHONDONTWRITEBYTECODE 1
 
-RUN cd /opt/tmp/desc-python/conda && \ 
-    bash docker-install.sh /usr/local/py && \
+RUN cd /opt/tmp/desc-cosmology-env/conda && \ 
+    bash docker-install.sh /usr/local/py ./condapack.txt ./pippack.txt && \
     find /$DESC_PYTHON_DIR -name "*.pyc" -delete
 
     

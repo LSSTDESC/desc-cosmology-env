@@ -1,16 +1,38 @@
 #!/bin/bash
 
+setup_conda() {
+  source $curBuildDir/py/etc/profile.d/conda.sh
+  conda activate base
+}
+
+if [ -z "$1" ]
+then
+	echo "Please provide a full path install directory"
+	exit 1
+fi
+
+if [ -z "$2" ]
+then
+	echo "Please provide a conda pack txt file"
+	exit 1
+fi
+
+if [ -z "$3" ]
+then
+	echo "Please provide a pip pack txt file"
+	exit 1
+fi
 
 unset PYTHONPATH
 
 curBuildDir=$1
 
 mkdir -p $curBuildDir
-cp conda/condapack.txt $curBuildDir
+cp $2 $curBuildDir
 #cp conda/post-conda-build.sh $curBuildDir
-cp conda/pippack.txt $curBuildDir
-cp nersc/setup-cosmology-env.sh $curBuildDir
-cp nersc/sitecustomize.py $curBuildDir
+cp $3 $curBuildDir
+#cp nersc/setup-cosmology-env.sh $curBuildDir
+#cp nersc/sitecustomize.py $curBuildDir
 sed -i 's|$1|'$curBuildDir'|g' $curBuildDir/setup-cosmology-env.sh
 cd $curBuildDir
 
@@ -22,25 +44,26 @@ url="https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge
 curl -LO "$url"
 
 bash ./Miniforge3-Linux-x86_64.sh -b -p $curBuildDir/py
-source $curBuildDir/py/bin/activate
+setup_conda
+#source $curBuildDir/py/bin/activate
 #
 export PYTHONNOUSERSITE=1
 
 mamba clean --all -y
 export CONDA_PKGS_DIRS=$curBuildDir/pkgs
 
-conda create -y --name desc-cosmology compilers
-conda activate desc-cosmology
+#conda create -y --name desc-cosmology compilers
+#conda activate desc-cosmology
 
 python -m pip cache purge
 
-mamba install -c conda-forge -y mpich=4.3.2=external_* 
+mamba install -c conda-forge -y compilers mpich=4.3.2=external_* 
  
 cd $curBuildDir
 
-mamba install -c conda-forge -y --file ./condapack.txt
-conda deactivate
-conda activate desc-cosmology 
+mamba install -c conda-forge -y --file $2
+#conda deactivate
+#conda activate desc-cosmology 
 conda env config vars set CSL_DIR=${CONDA_PREFIX}/cosmosis-standard-library
 cd ${CONDA_PREFIX}
 source ${CONDA_PREFIX}/bin/cosmosis-configure
@@ -55,7 +78,7 @@ cd $curBuildDir
 # could also find FIRECROWN DIR by doing
 # FIRECROWN_DIR=$(python -c "import firecrown; print('/'.join(firecrown.__spec__.submodule_search_locations[0].split('/')[0:-1]))") + "/firecrown"
 
-pip install --no-cache-dir -r ./pippack.txt
+pip install --no-cache-dir -r $3
 
 
 cd $curBuildDir
@@ -84,7 +107,7 @@ conda env config vars set CSL_DIR="${CONDA_PREFIX}/cosmosis-standard-library" FI
 python -m compileall $curBuildDir/py
 conda clean -y -a 
 
-#conda config --set env_prompt "(desc-cosmology-$1)" --env
+conda config --set env_prompt "(desc-cosmology)" --env
 
 conda env export --no-builds > $curBuildDir/desc-cosmology-nobuildinfo.yml
 conda env export > $curBuildDir/desc-cosmology-$CI_PIPELINE_ID.yml
