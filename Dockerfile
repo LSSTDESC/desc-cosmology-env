@@ -1,8 +1,6 @@
 FROM ubuntu:22.04
 MAINTAINER Heather Kelly <heather@slac.stanford.edu>
 
-#ARG PR_BRANCH=bleed
-
 #ARG DESC_PYTHON_DIR=/opt/desc
 ARG DESC_PYTHON_DIR=/usr/local
 
@@ -21,7 +19,6 @@ RUN apt update -y && \
     mkdir /opt/tmp && cd /opt/tmp && \
     git clone https://github.com/LSSTDESC/desc-cosmology-env && \
     cd desc-cosmology-env && \
- #   git checkout $PR_BRANCH && \
     cd conda && \ 
     bash install-mpich.sh && \
     cd /opt/tmp && \
@@ -41,14 +38,9 @@ USER lsst
 ENV PYTHONDONTWRITEBYTECODE 1
 
 RUN cd /opt/tmp/desc-python/conda && \ 
-    bash docker-install-env.sh /usr/local/py conda-pack.txt pip-pack.txt NERSC && \
+    bash docker-install.sh /usr/local/py && \
     find /$DESC_PYTHON_DIR -name "*.pyc" -delete
 
-    
-#USER root
-#RUN ln -s /opt/desc/py /usr/local/py
-
-USER lsst
     
 ENV HDF5_USE_FILE_LOCKING FALSE
 ENV PYTHONSTARTUP ''
