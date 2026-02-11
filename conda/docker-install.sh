@@ -114,5 +114,6 @@ conda env export > $curBuildDir/desc-cosmology-$CI_PIPELINE_ID.yml
 
 
 # Set permissions
-setfacl -R -m group::rx $curBuildDir
-setfacl -R -d -m group::rx $curBuildDir
+#setfacl -R -m group::rx $curBuildDir
+#setfacl -R -d -m group::rx $curBuildDir
+chmod -R g+rx $curBuildDir
