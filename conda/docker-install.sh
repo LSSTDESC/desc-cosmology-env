@@ -1,7 +1,7 @@
 #!/bin/bash
 
 setup_conda() {
-  source $curBuildDir/py/etc/profile.d/conda.sh
+  source $curBuildDir/etc/profile.d/conda.sh
   conda activate base
 }
 
@@ -43,7 +43,7 @@ cd $curBuildDir
 url="https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 curl -LO "$url"
 
-bash ./Miniforge3-Linux-x86_64.sh -b -p $curBuildDir/py
+bash ./Miniforge3-Linux-x86_64.sh -b -p $curBuildDir
 setup_conda
 #source $curBuildDir/py/bin/activate
 #
