@@ -1,8 +1,8 @@
 FROM ubuntu:22.04
 LABEL maintainer="Heather Kelly <heather@slac.stanford.edu>"
 
-#ARG DESC_PYTHON_DIR=/opt/desc
-ARG DESC_PYTHON_DIR=/usr/local
+ARG DESC_PYTHON_DIR=/opt/desc
+#ARG DESC_PYTHON_DIR=/usr/local
 
 
 RUN apt update -y && \
@@ -16,7 +16,6 @@ RUN apt update -y && \
     rm -rf /var/cache/apt && \
     groupadd -g 1000 -r lsst && useradd -u 1000 --no-log-init -m -r -g lsst lsst && \
     usermod --shell /bin/bash lsst && \
-    mkdir -p /usr/local && \
     mkdir /opt/tmp && cd /opt/tmp && \
     git clone https://github.com/LSSTDESC/desc-cosmology-env && \
     cd desc-cosmology-env && \
@@ -39,7 +38,7 @@ USER lsst
 ENV PYTHONDONTWRITEBYTECODE 1
 
 RUN cd /opt/tmp/desc-cosmology-env/conda && \ 
-    bash docker-install.sh /usr/local ./condapack.txt ./pippack.txt && \
+    bash docker-install.sh /opt/desc ./condapack.txt ./pippack.txt && \
     find /$DESC_PYTHON_DIR -name "*.pyc" -delete
 
     
@@ -47,7 +46,7 @@ ENV HDF5_USE_FILE_LOCKING FALSE
 ENV PYTHONSTARTUP ''
 
 
-RUN echo "source /usr/local/py/etc/profile.d/conda.sh" >> ~/.bashrc && \
+RUN echo "source /opt/desc/py/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo "conda activate base" >> ~/.bashrc
     
 ENV PATH="${DESC_PYTHON_DIR}/${PY_VER}/bin:${PATH}"
