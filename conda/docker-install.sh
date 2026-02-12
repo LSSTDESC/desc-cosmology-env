@@ -57,7 +57,8 @@ export CONDA_PKGS_DIRS=$curBuildDir/pkgs
 
 python -m pip cache purge
 
-mamba install -c conda-forge -y compilers mpich=4.3.2=external_* 
+#mamba install -c conda-forge -y compilers mpich=4.3.2=external_* 
+mamba install -c conda-forge/label/mpi-external -c conda-forge -y compilers mpich
  
 cd $curBuildDir
 
