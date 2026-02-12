@@ -72,7 +72,7 @@ mamba install -c conda-forge -y compilers
  
 cd $curBuildDir
 
-mamba install -c conda-forge -y --file $2
+mamba install -c conda-forge/label/mpi-external -c conda-forge -y --file $2
 #conda deactivate
 #conda activate desc-cosmology 
 conda env config vars set CSL_DIR=${CONDA_PREFIX}/cosmosis-standard-library
