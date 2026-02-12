@@ -35,21 +35,22 @@ WORKDIR $DESC_PYTHON_DIR
    
 USER lsst
 
-ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONDONTWRITEBYTECODE=1
 
 RUN cd /opt/tmp/desc-cosmology-env/conda && \ 
     bash docker-install.sh /opt/desc ./condapack.txt ./pippack.txt && \
     find /$DESC_PYTHON_DIR -name "*.pyc" -delete
 
     
-ENV HDF5_USE_FILE_LOCKING FALSE
-ENV PYTHONSTARTUP ''
+ENV HDF5_USE_FILE_LOCKING=FALSE
+ENV PYTHONSTARTUP=''
 
 
 RUN echo "source /opt/desc/py/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo "conda activate base" >> ~/.bashrc
     
-ENV PATH="${DESC_PYTHON_DIR}/${PY_VER}/bin:${PATH}"
+#ENV PATH="${DESC_PYTHON_DIR}/${PY_VER}/bin:${PATH}"
+ENV PATH="${DESC_PYTHON_DIR}/py/bin:${PATH}"
 SHELL ["/bin/bash", "--login", "-c"]
 
 

@@ -5,6 +5,11 @@ setup_conda() {
   conda activate base
 }
 
+wrap_cosmosis() {
+  source ${CONDA_PREFIX}/bin/cosmosis-configure
+  cosmosis-build-standard-library main
+}
+
 if [ -z "$1" ]
 then
 	echo "Please provide a full path install directory"
@@ -52,13 +57,18 @@ export PYTHONNOUSERSITE=1
 mamba clean --all -y
 export CONDA_PKGS_DIRS=$curBuildDir/pkgs
 
+conda config --add channels conda-forge/label/mpi-external
+conda config --set channel_priority strict
+
 #conda create -y --name desc-cosmology compilers
 #conda activate desc-cosmology
 
 python -m pip cache purge
 
 #mamba install -c conda-forge -y compilers mpich=4.3.2=external_* 
-mamba install -c conda-forge/label/mpi-external -c conda-forge -y compilers mpich
+#conda install -c conda-forge/label/mpi-external -y mpich
+conda install -y conda-forge/label/mpi-external:mpich
+mamba install -c conda-forge -y compilers
  
 cd $curBuildDir
 
@@ -67,8 +77,9 @@ mamba install -c conda-forge -y --file $2
 #conda activate desc-cosmology 
 conda env config vars set CSL_DIR=${CONDA_PREFIX}/cosmosis-standard-library
 cd ${CONDA_PREFIX}
-source ${CONDA_PREFIX}/bin/cosmosis-configure
-cosmosis-build-standard-library main
+#source ${CONDA_PREFIX}/bin/cosmosis-configure
+#cosmosis-build-standard-library main
+wrap_cosmosis
 
 #export CSL_DIR=${PWD}/cosmosis-standard-library
 #export FIRECROWN_DIR=${PWD}/firecrown
