@@ -67,12 +67,14 @@ python -m pip cache purge
 
 #mamba install -c conda-forge -y compilers mpich=4.3.2=external_* 
 #conda install -c conda-forge/label/mpi-external -y mpich
-conda install -y conda-forge/label/mpi-external:mpich
+#conda install -y conda-forge/label/mpi-external:mpich=4.3.2
+conda install -y "conda-forge/label/mpi-external::mpich[version='>=4.3']"
 mamba install -c conda-forge -y compilers
  
 cd $curBuildDir
 
-mamba install -c conda-forge/label/mpi-external -c conda-forge -y --file $2
+conda install -c conda-forge/label/mpi-external -c conda-forge -y --file $2
+conda install -y "conda-forge/label/mpi-external::mpich[version='>=4.3']"
 #conda deactivate
 #conda activate desc-cosmology 
 conda env config vars set CSL_DIR=${CONDA_PREFIX}/cosmosis-standard-library
