@@ -47,7 +47,10 @@ ENV PYTHONSTARTUP=''
 
 
 RUN echo "source /opt/desc/py/etc/profile.d/conda.sh" >> ~/.bashrc && \
-    echo "conda activate base" >> ~/.bashrc
+    echo "conda activate base" >> ~/.bashrc && \
+    echo "source cosmosis-configure" >> ~/.bashrc && \
+    echo "export COSMOSIS_NO_SUBPROCESS=1" >> ~/.bashrc && \
+    echo "export MPI4PY_RC_RECV_MPROBE=0" >> ~/.bashrc
     
 #ENV PATH="${DESC_PYTHON_DIR}/${PY_VER}/bin:${PATH}"
 ENV PATH="${DESC_PYTHON_DIR}/py/bin:${PATH}"
