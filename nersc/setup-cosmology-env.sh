@@ -13,6 +13,19 @@ conda activate desc-cosmology
 # Need to allow --user installs
 export PYTHONNOUSERSITE=0
 
+# Set this after conda environment is setup
+python_ver_major=$(python -c 'import sys; print(sys.version_info.major)')
+python_ver_minor=$(python -c 'import sys; print(sys.version_info.minor)')
+export DESCPYTHONVER="python$python_ver_major.$python_ver_minor"
+
+if [ -n "$DESC_COSMO_USERBASE" ]; then
+    export PYTHONUSERBASE=$DESC_COSMO_USERBASE
+    unset PYTHONUSERSITE
+    export PATH=$PYTHONUSERBASE/bin:$PATH
+    export PYTHONPATH="$PYTHONUSERBASE/lib/$DESCPYTHONVER/site-packages:$PYTHONPATH"
+    echo "using DESC_COSMO_USERBASE: $DESC_COSMO_USERBASE"
+fi
+
 # For cosmosis and firecrown.  Should try to find a better way to set these
 #export CSL_DIR=$CONDA_PREFIX/lib/python3.10/site-packages/cosmosis/cosmosis-standard-library
 #export FIRECROWN_SITE_PACKAGES=$CONDA_PREFIX/lib/python3.10/site-packages
