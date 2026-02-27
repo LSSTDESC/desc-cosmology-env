@@ -36,7 +36,7 @@ export DESC_COSMOLOGY=/global/cfs/cdirs/lsst/groups/MCP/cosmology
 export RUBIN_SIM_DATA_DIR=/dvs_ro/cfs/cdirs/lsst/groups/MCP/software/rubin_sim_data
 
 
-export DESC_COSMOLOGY_INSTALL=/global/common/software/lsst/gitlab/desc-cosmology/dev
+export DESC_COSMOLOGY_INSTALL=/global/common/software/lsst/gitlab/desc-cosmology/prod
 #source $DESC_COSMOLOGY_INSTALL/setup-cosmology-env.sh $DESC_COSMOLOGY_INSTALL
 source $DESC_COSMOLOGY_INSTALL/setup-cosmology-env.sh
     
