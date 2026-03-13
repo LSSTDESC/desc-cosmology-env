@@ -3,6 +3,7 @@
 module load PrgEnv-gnu
 module load cpu
 module load cray-mpich-abi/8.1.30
+#module load cray-mpich-abi/9.0.1
 
 unset PYTHONPATH
 
@@ -61,7 +62,7 @@ export PYTHONNOUSERSITE=1
 mamba clean --all -y
 export CONDA_PKGS_DIRS=$curBuildDir/pkgs
 
-conda create -y --name desc-cosmology compilers
+conda create -y --name desc-cosmology compilers python=3.13
 conda activate desc-cosmology
 
 python -m pip cache purge
@@ -109,6 +110,12 @@ git clone --depth 1 --branch "$(git ls-remote --tags --sort=-v:refname https://g
 #git clone https://github.com/LSSTDESC/augur.git
 cd augur
 python -m pip install --no-deps .
+
+cd $curBuildDir
+
+git clone https://github.com/binny-org/binny.git
+cd binny
+python -m pip install .
 
 cd $curBuildDir
 

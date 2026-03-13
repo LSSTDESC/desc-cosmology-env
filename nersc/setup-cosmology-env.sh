@@ -3,6 +3,7 @@
 module load PrgEnv-gnu
 module load cpu
 module load cray-mpich-abi/8.1.30
+#module load cray-mpich-abi/9.0.1
 module load cudatoolkit
 
 export DESC_LSST_INSTALL_DIR=$1

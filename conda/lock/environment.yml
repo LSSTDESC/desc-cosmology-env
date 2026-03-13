@@ -1,0 +1,28 @@
+name: base
+channels:
+  - conda-forge/label/mpi-external
+  - conda-forge
+dependencies:
+  - python=3.13
+  - conda[version='>=25.3.0']
+  - mamba[version='>=2.1.1']
+  - compilers
+  - cosmosis
+  - cosmosis-build-standard-library
+  - diffsky
+  - firecrown
+  - ipykernel
+  - jupyter
+  - lsstdesc-smokescreen
+  - mpi4py
+  - mpich
+  - namaster
+  - opencosmo
+  - psycopg2
+  - rubin-sim
+  - tjpcov
+  - pip:
+    - cobaya
+    - derivkit
+    - lsstdesc-dataregistry
+    - "binny @ https://github.com/binny-org/binny/archive/refs/tags/v0.1.0.tar.gz"

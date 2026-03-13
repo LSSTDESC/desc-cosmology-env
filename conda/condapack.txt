@@ -1,10 +1,12 @@
-firecrown
+diffsky
+firecrown==1.14.0
 ipykernel
 jupyter
 lsstdesc-smokescreen
 namaster
 mpi4py
 #mpich==3.4.*=external_*
+opencosmo
 psycopg2
 rubin_sim
 tjpcov
