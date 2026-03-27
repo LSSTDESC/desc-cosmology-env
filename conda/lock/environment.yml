@@ -13,6 +13,7 @@ dependencies:
   - firecrown
   - ipykernel
   - jupyter
+  - lsstdesc-crow
   - lsstdesc-smokescreen
   - mpi4py
   - mpich
@@ -25,4 +26,4 @@ dependencies:
     - cobaya
     - derivkit
     - lsstdesc-dataregistry
-    - "binny @ https://github.com/binny-org/binny/archive/refs/tags/v0.1.0.tar.gz"
+    - "binny @ https://github.com/binny-org/binny/archive/refs/tags/v0.1.1.tar.gz"
