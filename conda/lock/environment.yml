@@ -26,4 +26,4 @@ dependencies:
     - cobaya
     - derivkit
     - lsstdesc-dataregistry
-    - "pybinny @ https://github.com/binny-org/binny/archive/refs/tags/v0.1.1.tar.gz"
+    - pybinny
