@@ -95,14 +95,7 @@ echo "Cleaning"
 conda clean -y -a 
 
 cd $curBuildDir
-# Install augur
-# Find latest tag
-git clone --depth 1 --branch "$(git ls-remote --tags --sort=-v:refname https://github.com/LSSTDESC/augur.git | grep -o 'refs/tags/[^{}]*' | head -n 1 | sed 's|refs/tags/||')" https://github.com/LSSTDESC/augur.git
-cd augur
-python -m pip install --no-deps .
 
-
-cd $curBuildDir
 echo "Setting up copy of firecrown"
 firecrown_ver=$(conda list firecrown | grep firecrown|tr -s " " | cut -d " " -f 2)
 echo $firecrown_ver
