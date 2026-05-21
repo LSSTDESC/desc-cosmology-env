@@ -13,6 +13,7 @@ dependencies:
   - firecrown
   - ipykernel
   - jupyter
+  - lsstdesc-augur
   - lsstdesc-crow
   - lsstdesc-smokescreen
   - mpi4py
