@@ -5,7 +5,7 @@ wrapcosmosis() {
     source cosmosis-configure
 }
 
-echo "RUNNING DESC-COSMOLOGY DEV VERSION"
+echo "RUNNING DESC-COSMOLOGY v0.7.0"
 
 SCRIPT=${BASH_SOURCE[0]}
 
@@ -43,6 +43,18 @@ source $DESC_COSMOLOGY_INSTALL/setup-cosmology-env.sh
 #export PYTHONPATH=$PYTHONPATH:$DESC_COSMOLOGY_INSTALL
   
 wrapcosmosis
+
+# Set this after conda environment is setup
+python_ver_major=$(python -c 'import sys; print(sys.version_info.major)')
+python_ver_minor=$(python -c 'import sys; print(sys.version_info.minor)')
+export VERSION_LIBPYTHON="$python_ver_major.$python_ver_minor"
+
+
+export COSMOLOGY_EXTRA_PACKAGES=/global/common/software/lsst/gitlab/desc-cosmology/prod/extra
+export PATH=$COSMOLOGY_EXTRA_PACKAGES/bin:$PATH
+export PYTHONPATH=$COSMOLOGY_EXTRA_PACKAGES/lib/python$VERSION_LIBPYTHON/site-packages/:$PYTHONPATH
+
+
 
 # For GCRCatalogs
 export DESC_GCR_SITE='nersc'

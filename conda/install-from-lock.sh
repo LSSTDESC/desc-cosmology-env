@@ -58,6 +58,8 @@ fi
 
 cp conda/desc-cosmology-lock.yml $curBuildDir
 cp conda/pip.config $curBuildDir
+mkdir $curBuildDir/extra
+cp conda/update_package_setup.sh $curBuildDir/extra
 cp nersc/setup-cosmology-env.sh $curBuildDir
 sed -i 's|$1|'$curBuildDir'|g' $curBuildDir/setup-cosmology-env.sh
 cd $curBuildDir
