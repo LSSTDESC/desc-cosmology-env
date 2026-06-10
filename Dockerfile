@@ -21,7 +21,7 @@ MAINTAINER Heather Kelly <heather@slac.stanford.edu>
 
 ARG DESC_PYTHON_DIR=/opt/desc
 RUN mkdir $DESC_PYTHON_DIR && \
-    groupadd -g 1000 -r lsst && useradd -u 1000 --no-log-init -m -r -g lsst lsst && \
+    groupadd -g 1001 -r lsst && useradd -u 1000 --no-log-init -m -r -g lsst lsst && \
     usermod --shell /bin/bash lsst
     
 COPY --from=conda $DESC_PYTHON_DIR $DESC_PYTHON_DIR
