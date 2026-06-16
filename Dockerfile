@@ -32,6 +32,7 @@ RUN apt update -y && \
     build-essential \
     gfortran \
     git \
+    libpmi2-0-dev \
     patch \
     wget && \
     apt-get clean  && \
