@@ -6,7 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 RUN echo $PWD && \
     ls .
 ADD conda/desc-cosmology-lock.yml /locks/conda-linux-64.lock
-ADD conda/install-mpich.sh /locks/install-mpich.sh
+#ADD conda/install-mpich.sh /locks/install-mpich.sh
 
 
 RUN conda install -y -c conda-forge condax && \
@@ -27,21 +27,25 @@ RUN mkdir $DESC_PYTHON_DIR && \
 COPY --from=conda $DESC_PYTHON_DIR $DESC_PYTHON_DIR
 COPY --from=conda /locks /locks
 
+#     libpmi2-0-dev \
+
+
 RUN apt update -y && \
     apt install -y curl \
     build-essential \
     gfortran \
     git \
-    libpmi2-0-dev \
     patch \
     wget && \
     apt-get clean  && \
     rm -rf /var/cache/apt && \
     chown -R lsst $DESC_PYTHON_DIR && \
     chgrp -R lsst $DESC_PYTHON_DIR && \
-    ls -la $DESC_PYTHON_DIR && \
-    cd /locks && \
-    bash install-mpich.sh 
+    ls -la $DESC_PYTHON_DIR 
+    # && \
+    # cd /locks 
+    # && \
+    # bash install-mpich.sh 
 
 ARG LSST_USER=lsst
 ARG LSST_GROUP=lsst
