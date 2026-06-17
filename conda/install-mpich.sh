@@ -11,7 +11,7 @@ unset F90
 unset F90FLAGS
 export FFLAGS=-fallow-argument-mismatch
 export FCFLAGS=-fallow-argument-mismatch
-./configure -with-device=ch4:ofi --with-pmi2=/usr --disable-f08 --disable-collalgo-tests                                                        
+./configure --with-device=ch4:ofi --with-pmi2=/usr --disable-f08 --disable-collalgo-tests                                                        
 make -j 4                                                               
 make install                                                           
 make clean                                                        
