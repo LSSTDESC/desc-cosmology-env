@@ -1,0 +1,31 @@
+name: base
+channels:
+  - conda-forge/label/mpi-external
+  - conda-forge
+dependencies:
+  - python=3.11
+  - conda[version='>=25.3.0']
+  - mamba[version='>=2.1.1']
+  - compilers
+  - cosmosis
+  - cosmosis-build-standard-library
+  - diffsky
+  - firecrown
+  - ipykernel
+  - isitgr
+  - jupyter
+  - lsstdesc-augur
+  - lsstdesc-crow
+  - lsstdesc-smokescreen
+  - mpi4py
+  - openmpi
+  - namaster
+  - opencosmo
+  - psycopg2
+  - rubin-sim
+  - tjpcov
+  - pip:
+    - cobaya
+    - derivkit
+    - lsstdesc-dataregistry
+    - pybinny
