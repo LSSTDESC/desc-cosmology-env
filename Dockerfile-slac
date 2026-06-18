@@ -1,66 +1,201 @@
-# Build container
-FROM continuumio/miniconda3:latest as conda
+# =============================================================================
+# DESC Cosmology Environment Container — S3DF (SLAC) Edition
+# Runtime: Apptainer/Singularity on S3DF milano partition
+#
+# MPI Strategy:
+#   S3DF does NOT inject MPI at runtime (unlike NERSC Shifter/podman-hpc).
+#   The container carries its own full OpenMPI 4.1.1 installation, matching
+#   the version on S3DF milano nodes (mpi/openmpi-x86_64 module).
+#   mpi4py is pip-installed from source against this OpenMPI build.
+#   At runtime, Apptainer uses the container's mpirun to launch MPI jobs.
+#
+# Build:
+#   docker build -f Dockerfile.s3df -t lsstdesc/desc-cosmology-s3df:latest .
+#
+# Push to registry so Apptainer can pull it on S3DF:
+#   docker push lsstdesc/desc-cosmology-s3df:latest
+#
+# On S3DF — convert to .sif (do this once on an interactive node):
+#   apptainer pull desc-cosmology-s3df.sif docker://lsstdesc/desc-cosmology-s3df:latest
+#
+# Interactive shell on S3DF:
+#   apptainer shell \
+#     -B /sdf,/fs,/sdf/scratch,/lscratch \
+#     /path/to/desc-cosmology-s3df.sif
+#
+# MPI batch job (sbatch script):
+#   #!/bin/bash
+#   #SBATCH --partition=milano
+#   #SBATCH --nodes=2
+#   #SBATCH --ntasks-per-node=4
+#   mpirun -n 8 apptainer exec \
+#     -B /sdf,/fs,/sdf/scratch,/lscratch \
+#     /path/to/desc-cosmology-s3df.sif \
+#     /opt/desc/bin/python your_script.py
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Stage 1: Build the conda environment
+# -----------------------------------------------------------------------------
+FROM continuumio/miniconda3:latest AS conda
 
 ARG DESC_PYTHON_DIR=/opt/desc
-ENV PYTHONDONTWRITEBYTECODE=1
-RUN echo $PWD && \
-    ls .
-ADD conda/desc-cosmology-lock.yml /locks/conda-linux-64.lock
-#ADD conda/install-mpich.sh /locks/install-mpich.sh
 
+ENV PYTHONDONTWRITEBYTECODE=1
 
 RUN conda install -y -c conda-forge condax && \
-    condax install -c conda-forge conda-lock && \
-    mkdir $DESC_PYTHON_DIR && \
-    ~/.local/bin/conda-lock install --mamba -p $DESC_PYTHON_DIR /locks/conda-linux-64.lock && \
-    find /$DESC_PYTHON_DIR -name "*.pyc" -delete && \
-    (find $DESC_PYTHON_DIR -name "doc" | xargs rm -Rf) || true 
-    
-FROM ubuntu:24.04
-MAINTAINER Heather Kelly <heather@slac.stanford.edu>
+    condax install -c conda-forge conda-lock
+
+# conda-lock file must NOT include mpi4py — installed via pip below
+# against the OpenMPI build in stage 2.
+# All other desc-cosmology packages go here as normal.
+COPY conda/desc-cosmology-lock-openmpi.yml /locks/conda-linux-64.lock
+
+RUN mkdir -p ${DESC_PYTHON_DIR} && \
+    ~/.local/bin/conda-lock install --mamba -p ${DESC_PYTHON_DIR} /locks/conda-linux-64.lock && \
+    find ${DESC_PYTHON_DIR} -name "*.pyc" -delete && \
+    find ${DESC_PYTHON_DIR} -name "*.pyo" -delete && \
+    (find ${DESC_PYTHON_DIR} -name "doc" -type d | xargs rm -rf) || true && \
+    (find ${DESC_PYTHON_DIR} -name "tests" -type d | xargs rm -rf) || true
+
+# -----------------------------------------------------------------------------
+# Stage 2: Runtime image — build OpenMPI 4.1.1, then pip install mpi4py
+#
+# Base: ubuntu:22.04 (glibc 2.35)
+# Why 22.04 not 24.04: S3DF milano nodes run RHEL 8.x (glibc ~2.28).
+# Ubuntu 22.04 (glibc 2.35) is forward-compatible; Ubuntu 24.04 (glibc 2.39)
+# would also work since the container carries its own glibc. Either is fine,
+# but 22.04 minimizes any glibc-related surprises with older host libraries
+# that might be bind-mounted in from /sdf.
+# -----------------------------------------------------------------------------
+FROM ubuntu:22.04
+
+LABEL maintainer="Heather Kelly <heather@slac.stanford.edu>"
+LABEL org.opencontainers.image.source="https://github.com/LSSTDESC/desc-cosmology-env"
+LABEL org.opencontainers.image.description="DESC Cosmology environment for S3DF/SLAC (OpenMPI 4.1.1, Apptainer)"
 
 ARG DESC_PYTHON_DIR=/opt/desc
-RUN mkdir $DESC_PYTHON_DIR && \
-    groupadd -g 1001 -r lsst && useradd -u 1001 --no-log-init -m -r -g lsst lsst && \
-    usermod --shell /bin/bash lsst
-    
-COPY --from=conda $DESC_PYTHON_DIR $DESC_PYTHON_DIR
+ARG LSST_UID=1001
+ARG LSST_GID=1001
+
+# OpenMPI version — must match S3DF host: mpirun (Open MPI) 4.1.1
+ARG OPENMPI_VERSION=4.1.1
+
+# mpi4py version
+ARG MPI4PY_VERSION=4.0.3
+
+# Create lsst user/group
+RUN groupadd -g ${LSST_GID} -r lsst && \
+    useradd -u ${LSST_UID} --no-log-init -m -r -g lsst lsst && \
+    usermod --shell /bin/bash lsst && \
+    mkdir -p ${DESC_PYTHON_DIR} && \
+    chown lsst:lsst ${DESC_PYTHON_DIR}
+
+# Install build dependencies and runtime libraries.
+# libfabric-dev: OFI transport support for OpenMPI (used by S3DF's InfiniBand/OmniPath)
+# libucx-dev: UCX transport (another common HPC fabric layer on S3DF)
+# libpmi2-0-dev: PMI2 support so OpenMPI can integrate with Slurm on S3DF
+# hwloc: hardware topology awareness for CPU binding
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        gfortran \
+        wget \
+        curl \
+        git \
+        patch \
+        ca-certificates \
+        libgomp1 \
+        procps \
+        hwloc \
+        libhwloc-dev \
+        libfabric-dev \
+        libucx-dev \
+        libpmi2-0-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt
+
+# Build OpenMPI 4.1.1 from source.
+# Version must match S3DF's: mpirun (Open MPI) 4.1.1
+# --with-pmi: enables PMI/PMI2 support for Slurm integration on S3DF
+# --with-ucx: enables UCX transport (InfiniBand/shared memory on S3DF nodes)
+# --with-ofi: enables OFI/libfabric transport
+# --enable-mpi-cxx: C++ bindings (needed by some cosmology codes)
+# --enable-shared: required so mpi4py can link against libmpi.so at build time
+# FC=gfortran: explicit Fortran compiler to avoid configure confusion
+WORKDIR /tmp
+RUN wget -q https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-${OPENMPI_VERSION}.tar.gz && \
+    tar xzf openmpi-${OPENMPI_VERSION}.tar.gz && \
+    cd openmpi-${OPENMPI_VERSION} && \
+    ./configure \
+        --prefix=/usr/local \
+        --with-pmi \
+        --with-ucx \
+        --with-ofi \
+        --enable-mpi-cxx \
+        --enable-shared \
+        FC=gfortran \
+        FFLAGS="-fallow-argument-mismatch" \
+        FCFLAGS="-fallow-argument-mismatch" && \
+    make -j$(nproc) && \
+    make install && \
+    cd /tmp && \
+    rm -rf openmpi-${OPENMPI_VERSION} openmpi-${OPENMPI_VERSION}.tar.gz && \
+    ldconfig
+
+# Verify OpenMPI installed correctly
+RUN /usr/local/bin/mpirun --version
+
+# Copy the conda environment from build stage
+COPY --from=conda --chown=lsst:lsst ${DESC_PYTHON_DIR} ${DESC_PYTHON_DIR}
 COPY --from=conda /locks /locks
 
-#     libpmi2-0-dev \
+# Install mpi4py via pip, compiled from source against our OpenMPI build.
+# --no-binary forces source compilation so it links against
+# /usr/local/lib/libmpi.so (our OpenMPI 4.1.1), not a pre-built wheel.
+RUN ${DESC_PYTHON_DIR}/bin/pip install \
+        --no-cache-dir \
+        --no-binary mpi4py \
+        mpi4py==${MPI4PY_VERSION} && \
+    echo "=== mpi4py linkage ===" && \
+    ldd ${DESC_PYTHON_DIR}/lib/python*/site-packages/mpi4py/MPI*.so | grep -E "mpi|open" && \
+    echo "=== mpi4py version ===" && \
+    ${DESC_PYTHON_DIR}/bin/python -c "import mpi4py; print(mpi4py.__version__)"
 
+# Fix ownership
+RUN chown -R lsst:lsst ${DESC_PYTHON_DIR}
 
-RUN apt update -y && \
-    apt install -y curl \
-    build-essential \
-    gfortran \
-    git \
-    patch \
-    wget && \
-    apt-get clean  && \
-    rm -rf /var/cache/apt && \
-    chown -R lsst $DESC_PYTHON_DIR && \
-    chgrp -R lsst $DESC_PYTHON_DIR && \
-    ls -la $DESC_PYTHON_DIR 
-    # && \
-    # cd /locks 
-    # && \
-    # bash install-mpich.sh 
-
-ARG LSST_USER=lsst
-ARG LSST_GROUP=lsst
-   
+# Switch to non-root user
 USER lsst
 
+# Environment
 ENV PYTHONDONTWRITEBYTECODE=1
-
+# Prevents HDF5 locking issues on Lustre (/sdf/scratch, /fs/ddn/sdf)
 ENV HDF5_USE_FILE_LOCKING=FALSE
+# CosmoSIS: avoid subprocess spawning in samplers
+ENV COSMOSIS_NO_SUBPROCESS=1
+# Prevents mpi4py MPI_Mprobe hang with some OpenMPI configurations
+ENV MPI4PY_RC_RECV_MPROBE=0
 ENV PYTHONSTARTUP=''
+ENV PATH="/usr/local/bin:${DESC_PYTHON_DIR}/bin:${PATH}"
+# Ensure OpenMPI's lib is on the path at runtime inside Apptainer
+ENV LD_LIBRARY_PATH="/usr/local/lib:${LD_LIBRARY_PATH}"
 
-RUN echo "source /opt/desc/bin/activate" >> ~/.bashrc && \
-    echo "source cosmosis-configure" >> ~/.bashrc && \
+# Shell startup
+RUN echo "source ${DESC_PYTHON_DIR}/bin/activate" >> ~/.bashrc && \
+    echo "source cosmosis-configure 2>/dev/null || true" >> ~/.bashrc && \
     echo "export COSMOSIS_NO_SUBPROCESS=1" >> ~/.bashrc && \
-    echo "export MPI4PY_RC_RECV_MPROBE=0" >> ~/.bashrc
-    
-#ENV PATH="${DESC_PYTHON_DIR}/${PY_VER}/bin:${PATH}"
+    echo "export MPI4PY_RC_RECV_MPROBE=0" >> ~/.bashrc && \
+    echo "export HDF5_USE_FILE_LOCKING=FALSE" >> ~/.bashrc
+
 SHELL ["/bin/bash", "--login", "-c"]
+
+# Build-time sanity checks
+RUN python -c "import firecrown; print('firecrown OK')" && \
+    python -c "import mpi4py; print('mpi4py OK:', mpi4py.__version__)" && \
+    mpirun -n 2 python -m mpi4py.bench helloworld
+
+WORKDIR /home/lsst
+
+# No ENTRYPOINT — Apptainer works best without one;
+# allows both 'apptainer shell' and 'apptainer exec ... python script.py'
