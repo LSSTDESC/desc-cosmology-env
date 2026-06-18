@@ -48,9 +48,6 @@ ENV PYTHONDONTWRITEBYTECODE=1
 RUN conda install -y -c conda-forge condax && \
     condax install -c conda-forge conda-lock
 
-# conda-lock file must NOT include mpi4py — installed via pip in stage 2
-# against the system OpenMPI headers. All other desc-cosmology packages
-# go here as normal.
 COPY conda/lock/auto/desc-cosmology-lock-slac-main-2026-06-18.yml /locks/conda-linux-64.lock
 
 RUN mkdir -p ${DESC_PYTHON_DIR} && \
@@ -72,6 +69,8 @@ LABEL org.opencontainers.image.description="DESC Cosmology environment for S3DF/
 ARG DESC_PYTHON_DIR=/opt/desc
 ARG LSST_UID=1001
 ARG LSST_GID=1001
+# CosmoSIS standard library branch to build
+ARG COSMOSIS_SL_BRANCH=main
 ARG MPI4PY_VERSION=4.0.3
 
 # Create lsst user/group.
@@ -121,6 +120,37 @@ COPY --from=conda /locks /locks
 #    ldd ${DESC_PYTHON_DIR}/lib/python*/site-packages/mpi4py/MPI*.so | grep -i mpi && \
 #    echo "=== mpi4py version ===" && \
 #    ${DESC_PYTHON_DIR}/bin/python -c "import mpi4py; print(mpi4py.__version__)"
+
+# -----------------------------------------------------------------------------
+# Build CosmoSIS standard library
+#
+# Replicates the manual setup steps:
+#   conda env config vars set CSL_DIR=${CONDA_PREFIX}/cosmosis-standard-library
+#   cd ${CONDA_PREFIX}
+#   config_cosmosis
+#   cosmosis-build-standard-library main
+#
+# Notes:
+#   - config_cosmosis is a shell function defined in cosmosis's activate script;
+#     we source it explicitly here since we're not in an interactive conda env
+#   - CSL_DIR is set to ${DESC_PYTHON_DIR}/cosmosis-standard-library, matching
+#     what conda env config vars would set at runtime
+#   - cosmosis-build-standard-library clones from GitHub and builds Fortran/C
+#     modules, so build-essential and gfortran must be installed above
+#   - The build runs as root so it can write into ${DESC_PYTHON_DIR};
+#     ownership is fixed afterward
+# -----------------------------------------------------------------------------
+ENV CSL_DIR=${DESC_PYTHON_DIR}/cosmosis-standard-library
+ENV COSMOSIS_SRC_DIR=${DESC_PYTHON_DIR}
+
+RUN bash -c "\
+    source ${DESC_PYTHON_DIR}/bin/activate && \
+    source ${DESC_PYTHON_DIR}/bin/cosmosis-configure && \
+    cd ${DESC_PYTHON_DIR} && \
+    cosmosis-build-standard-library ${COSMOSIS_SL_BRANCH}" && \
+    echo "=== CosmoSIS standard library built ===" && \
+    ls ${DESC_PYTHON_DIR}/cosmosis-standard-library
+
 
 # Fix ownership after pip install as root
 RUN chown -R lsst:lsst ${DESC_PYTHON_DIR}
