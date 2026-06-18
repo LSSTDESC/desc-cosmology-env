@@ -114,14 +114,14 @@ COPY --from=conda /locks /locks
 # Install mpi4py via pip, compiled from source against the system OpenMPI.
 # --no-binary forces source compilation so it links against the apt-installed
 # libmpi.so rather than using a pre-built wheel linked against a different MPI.
-RUN ${DESC_PYTHON_DIR}/bin/pip install \
-        --no-cache-dir \
-        --no-binary mpi4py \
-        mpi4py==${MPI4PY_VERSION} && \
-    echo "=== mpi4py linkage ===" && \
-    ldd ${DESC_PYTHON_DIR}/lib/python*/site-packages/mpi4py/MPI*.so | grep -i mpi && \
-    echo "=== mpi4py version ===" && \
-    ${DESC_PYTHON_DIR}/bin/python -c "import mpi4py; print(mpi4py.__version__)"
+#RUN ${DESC_PYTHON_DIR}/bin/pip install \
+#        --no-cache-dir \
+#        --no-binary mpi4py \
+#        mpi4py==${MPI4PY_VERSION} && \
+#    echo "=== mpi4py linkage ===" && \
+#    ldd ${DESC_PYTHON_DIR}/lib/python*/site-packages/mpi4py/MPI*.so | grep -i mpi && \
+#    echo "=== mpi4py version ===" && \
+#    ${DESC_PYTHON_DIR}/bin/python -c "import mpi4py; print(mpi4py.__version__)"
 
 # Fix ownership after pip install as root
 RUN chown -R lsst:lsst ${DESC_PYTHON_DIR}
