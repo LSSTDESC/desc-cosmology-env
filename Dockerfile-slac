@@ -57,8 +57,7 @@ RUN mkdir -p ${DESC_PYTHON_DIR} && \
     ~/.local/bin/conda-lock install --mamba -p ${DESC_PYTHON_DIR} /locks/conda-linux-64.lock && \
     find ${DESC_PYTHON_DIR} -name "*.pyc" -delete && \
     find ${DESC_PYTHON_DIR} -name "*.pyo" -delete && \
-    (find ${DESC_PYTHON_DIR} -name "doc" -type d | xargs rm -rf) || true && \
-    (find ${DESC_PYTHON_DIR} -name "tests" -type d | xargs rm -rf) || true
+    (find ${DESC_PYTHON_DIR} -name "doc" -type d | xargs rm -rf) || true 
 
 # -----------------------------------------------------------------------------
 # Stage 2: Runtime image
