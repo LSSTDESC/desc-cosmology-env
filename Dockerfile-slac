@@ -156,6 +156,9 @@ RUN bash -c "\
 #    python_ver_minor=$(python -c 'import sys; print(sys.version_info.minor)') && \
 #    export DESC_VER_LIBPYTHON="$python_ver_major.$python_ver_minor"
 
+# Add an entrypoint script
+COPY slac/s3df-entrypoint.sh /opt/desc/bin/s3df-entrypoint.sh
+RUN chmod +x /opt/desc/bin/s3df-entrypoint.sh
 
 # Fix ownership after pip install as root
 RUN chown -R lsst:lsst ${DESC_PYTHON_DIR}
