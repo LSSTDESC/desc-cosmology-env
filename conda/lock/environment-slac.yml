@@ -17,6 +17,7 @@ dependencies:
   - lsstdesc-crow
   - lsstdesc-smokescreen
   - mpi4py
+  - numpy<2.4
   - openmpi
   - namaster
   - opencosmo
