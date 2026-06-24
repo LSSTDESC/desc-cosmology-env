@@ -3,16 +3,15 @@ channels:
   - conda-forge/label/mpi-external
   - conda-forge
 dependencies:
-  - python=3.11
+  - python=3.13
   - conda[version='>=25.3.0']
   - mamba[version='>=2.1.1']
   - compilers
   - cosmosis
   - cosmosis-build-standard-library
   - diffsky
-  - firecrown
+  - firecrown==1.14.3
   - ipykernel
-  - isitgr
   - jupyter
   - lsstdesc-augur
   - lsstdesc-crow
@@ -27,5 +26,6 @@ dependencies:
   - pip:
     - cobaya
     - derivkit
+    - isitgr
     - lsstdesc-dataregistry
     - pybinny
