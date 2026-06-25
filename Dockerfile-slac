@@ -48,7 +48,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 RUN conda install -y -c conda-forge condax && \
     condax install -c conda-forge conda-lock
 
-COPY conda/lock/auto/desc-cosmology-lock-slac-main-2026-06-24.yml /locks/conda-linux-64.lock
+COPY conda/lock/auto/desc-cosmology-lock-slac-main-2026-06-25.yml /locks/conda-linux-64.lock
 
 RUN mkdir -p ${DESC_PYTHON_DIR} && \
     ~/.local/bin/conda-lock install --mamba -p ${DESC_PYTHON_DIR} /locks/conda-linux-64.lock && \
