@@ -10,9 +10,10 @@ dependencies:
   - cosmosis
   - cosmosis-build-standard-library
   - diffsky
-  - firecrown
+  - firecrown=1.14.3
   - ipykernel
   - jupyter
+  - lsdb
   - lsstdesc-augur
   - lsstdesc-crow
   - lsstdesc-smokescreen
