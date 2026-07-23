@@ -73,12 +73,6 @@ ARG LSST_GID=1001
 ARG COSMOSIS_SL_BRANCH=main
 ARG MPI4PY_VERSION=4.0.3
 
-
-
-COPY --chown=root:root entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-
 # Create lsst user/group.
 # UID/GID 1001 avoids Ubuntu 22.04's pre-allocated GID 1000.
 RUN groupadd -g ${LSST_GID} -r lsst && \
