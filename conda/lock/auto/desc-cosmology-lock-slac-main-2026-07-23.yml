@@ -13,7 +13,7 @@
 version: 1
 metadata:
   content_hash:
-    linux-64: 2b6964b720e5937dad9cd134695e48fad6c9ebe48a30653e065193c7948d2ff3
+    linux-64: 2f4ab4fedc148507802ab4278043bd050dbb1a293ffc93e6dcfcc8ec4b5bee32
   channels:
   - url: conda-forge/label/mpi-external
     used_env_vars: []
@@ -629,18 +629,6 @@ package:
   hash:
     md5: f1976ce927373500cc19d3c0b2c85177
     sha256: a14a9ad02101aab25570543a59c5193043b73dc311a25650134ed9e6cb691770
-  category: main
-  optional: false
-- name: backports.strenum
-  version: 1.3.1
-  manager: conda
-  platform: linux-64
-  dependencies:
-    python: '>=3.11'
-  url: https://conda.anaconda.org/conda-forge/noarch/backports.strenum-1.3.1-haf276df_3.conda
-  hash:
-    md5: 88a83285035d8f01f5630d2a3acd2a80
-    sha256: e5de6cb85d09f37584705a2411d4524f3208a88ac21edaff4dceef7495cb3c43
   category: main
   optional: false
 - name: backports.zstd
@@ -3739,6 +3727,7 @@ package:
   manager: conda
   platform: linux-64
   dependencies:
+    __cuda: ''
     __glibc: '>=2.17,<3.0.a0'
     aws-crt-cpp: '>=0.40.1,<0.40.2.0a0'
     aws-sdk-cpp: '>=1.11.833,<1.11.834.0a0'
@@ -3762,10 +3751,10 @@ package:
     orc: '>=2.3.0,<2.3.1.0a0'
     snappy: '>=1.2.2,<1.3.0a0'
     zstd: '>=1.5.7,<1.6.0a0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-24.0.0-h3e48024_9_cpu.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-24.0.0-hfe42214_9_cuda.conda
   hash:
-    md5: 4cac0ddbb76d5294d0a5649633a0dc35
-    sha256: 92e0fe06d39351ecf8f2c1ce7ad47c552c34f2ebb692c145fa506bbe13bf109d
+    md5: b35f7ba70e51707ca623b95a9b144660
+    sha256: e5efc5b88e9878a32bbd513f1775d12de50dbb41b5a0f21f4cba46194f0dddbf
   category: main
   optional: false
 - name: libarrow-acero
@@ -3778,10 +3767,10 @@ package:
     libarrow-compute: 24.0.0
     libgcc: '>=14'
     libstdcxx: '>=14'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-acero-24.0.0-h635bf11_9_cpu.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-acero-24.0.0-h635bf11_9_cuda.conda
   hash:
-    md5: cceb8bc7191b5916df504800e3e98056
-    sha256: cddd787fb799a3f9d9a6a0c5110f7aa468fcc9d71aff213856876c36e694b279
+    md5: 03605cbd744d3834dd8b659d6fde4e6e
+    sha256: 4709e484c91d60c6195084482382fb6aa579056df3e3d6a5b0d33c19a3e745e6
   category: main
   optional: false
 - name: libarrow-compute
@@ -3796,10 +3785,10 @@ package:
     libstdcxx: '>=14'
     libutf8proc: '>=2.11.3,<2.12.0a0'
     re2: ''
-  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-compute-24.0.0-h53684a4_9_cpu.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-compute-24.0.0-h53684a4_9_cuda.conda
   hash:
-    md5: d2162528bc0d112cac9be3b03f879164
-    sha256: 465ab2256f9c9fcdd41e3a7ef28600bb34287f0fb58a970f7046c53b7e6cc51c
+    md5: a5422e7465c69feed04d3b28e66726d7
+    sha256: 73831f11838970d1fe128e8584a5579cbf0cdf7a0529b7351054ec0c80aa0ff3
   category: main
   optional: false
 - name: libarrow-dataset
@@ -3814,10 +3803,10 @@ package:
     libgcc: '>=14'
     libparquet: 24.0.0
     libstdcxx: '>=14'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-dataset-24.0.0-h635bf11_9_cpu.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-dataset-24.0.0-h635bf11_9_cuda.conda
   hash:
-    md5: f94da761b5d8029a07c2a8fcac021e4f
-    sha256: 26add89d034b1fdf91334b63e9892af3087ae70c6c6605ad82a9f47ac7ae0eec
+    md5: fd20b7016432a5de88dd0c2bf8ace1d4
+    sha256: 0375586635fa9f6a2d032ace657986758af9710f8a42cc16b323ac472bfb1c77
   category: main
   optional: false
 - name: libarrow-substrait
@@ -3833,10 +3822,10 @@ package:
     libgcc: '>=14'
     libprotobuf: '>=6.33.5,<6.33.6.0a0'
     libstdcxx: '>=14'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-substrait-24.0.0-hb4dd7c2_9_cpu.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libarrow-substrait-24.0.0-hb4dd7c2_9_cuda.conda
   hash:
-    md5: 71d9d232dad9b517b3b0f2112ab6dd8d
-    sha256: dcdb718ef114704005210551b72e3be9d12e95134afe42629a1c14a28b59064e
+    md5: bc708c6e0933ff8bb878684eafdd9701
+    sha256: d02583e119b3dd833c6c2c78bdcc169188965076d33e6472e710d2445e600b04
   category: main
   optional: false
 - name: libblas
@@ -4494,10 +4483,10 @@ package:
     libstdcxx: '>=14'
     libthrift: '>=0.22.0,<0.22.1.0a0'
     openssl: '>=3.5.7,<4.0a0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libparquet-24.0.0-h7376487_9_cpu.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libparquet-24.0.0-h7376487_9_cuda.conda
   hash:
-    md5: f86267ec3072c21c2c632e3a4f5e64cc
-    sha256: 6c0635c86d7987fa89b07e0ce6664e8b2fcf0b6f0a0055a16a97d07b2c7af4e5
+    md5: 6574d65f962ff5f2829a23a1a4f84147
+    sha256: 624c1baa1389bab22e6dad4f6c0f4503539a17edb90ec1b5591fd7870918a618
   category: main
   optional: false
 - name: libpng
@@ -6358,10 +6347,10 @@ package:
     libzlib: '>=1.3.2,<2.0a0'
     python: '>=3.13,<3.14.0a0'
     python_abi: 3.13.*
-  url: https://conda.anaconda.org/conda-forge/linux-64/pyarrow-core-24.0.0-py313h98bfbea_0_cpu.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/pyarrow-core-24.0.0-py313hfe0801a_0_cuda.conda
   hash:
-    md5: 4c7cc18a6d6d18557c18069af469a96c
-    sha256: feeb4ae83dffa8af4ee131279925e22e6969958f14342015f94d75cc196ef689
+    md5: e98d8ed4ddf523bc1130705f4823046f
+    sha256: d62e4a14f50ec9aba630900eb10f2bbf7f79648c25b659d796b15c8d710eb1c1
   category: main
   optional: false
 - name: pybind11
@@ -7228,19 +7217,18 @@ package:
   category: main
   optional: false
 - name: sacc
-  version: '2.4'
+  version: 2.1.2
   manager: conda
   platform: linux-64
   dependencies:
     astropy-base: ''
-    backports.strenum: ''
-    numpy: '>=2'
+    numpy: ''
     python: '>=3.10'
     scipy: ''
-  url: https://conda.anaconda.org/conda-forge/noarch/sacc-2.4-pyhd8ed1ab_0.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/sacc-2.1.2-pyhd8ed1ab_0.conda
   hash:
-    md5: e54b8ab2fc3ded4c72203bd13f324db1
-    sha256: a44882c00f017d0645f6279886f958e446a578c3fd7c3c482b04809efb4f4813
+    md5: ed39d23fe3928e474466dc0a87f0b8c3
+    sha256: 37869108cadceb04a17d34061b5a728383a049cf905be5a7ac28c86f04786ef5
   category: main
   optional: false
 - name: scikit-learn
