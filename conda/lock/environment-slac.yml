@@ -25,7 +25,8 @@ dependencies:
   - namaster
   - opencosmo
   - psycopg2
-  - rubin-sim
+  - rubin-sim=2.1.2
+  - sacc=
   - tjpcov
   - pip:
     - cobaya
