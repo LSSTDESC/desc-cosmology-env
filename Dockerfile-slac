@@ -73,6 +73,12 @@ ARG LSST_GID=1001
 ARG COSMOSIS_SL_BRANCH=main
 ARG MPI4PY_VERSION=4.0.3
 
+
+
+COPY --chown=root:root entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+
 # Create lsst user/group.
 # UID/GID 1001 avoids Ubuntu 22.04's pre-allocated GID 1000.
 RUN groupadd -g ${LSST_GID} -r lsst && \
@@ -96,6 +102,7 @@ RUN apt-get update -y && \
         patch \
         ca-certificates \
         libgomp1 \
+        gosu \
         procps \
         libopenmpi-dev \
         openmpi-bin && \
@@ -156,15 +163,26 @@ RUN bash -c "\
 #    python_ver_minor=$(python -c 'import sys; print(sys.version_info.minor)') && \
 #    export DESC_VER_LIBPYTHON="$python_ver_major.$python_ver_minor"
 
+# -----------------------------------------------------------------------------
+# Entrypoint: adjust the lsst user's UID/GID to match the host user when
+# LOCAL_UID/LOCAL_GID are provided (plain `docker run` use case). If they're
+# not set, or if we're not running as root (e.g. under Apptainer, which runs
+# as the host user directly and never invokes this), just exec the command
+# as-is with no changes.
+# -----------------------------------------------------------------------------
+
+#COPY --chown=root:root entrypoint.sh /usr/local/bin/entrypoint.sh
+#RUN chmod +x /usr/local/bin/entrypoint.sh
+
 # Add an entrypoint script
-COPY slac/s3df-entrypoint.sh /opt/desc/bin/s3df-entrypoint.sh
+COPY --chown=root:root slac/s3df-entrypoint.sh /opt/desc/bin/s3df-entrypoint.sh
 RUN chmod +x /opt/desc/bin/s3df-entrypoint.sh
 
 # Fix ownership after pip install as root
 RUN chown -R lsst:lsst ${DESC_PYTHON_DIR}
 
 # Switch to non-root user
-USER lsst
+#USER lsst
 
 # Environment
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -200,3 +218,9 @@ WORKDIR /home/lsst
 
 # No ENTRYPOINT — Apptainer works best without one;
 # allows both 'apptainer shell' and 'apptainer exec ... python script.py'
+
+# Do NOT set USER here — entrypoint.sh drops privileges itself via gosu.
+# Apptainer ignores this ENTRYPOINT entirely and runs as the host user,
+# so this only affects `docker run` / `docker exec`.
+ENTRYPOINT ["/opt/desc/bin/s3df-entrypoint.sh"]
+CMD ["/bin/bash", "--login"]
