@@ -196,7 +196,7 @@ ENV LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu/openmpi/lib:${LD_LIBRARY_PATH}"
 ## HMKneedto fix path for firecrown_dir
 RUN echo "source ${DESC_PYTHON_DIR}/bin/activate" >> ~/.bashrc && \
     echo "source cosmosis-configure 2>/dev/null || true" >> ~/.bashrc && \
-    echo "export FIRECROWN_DIR=${DESC_PYTHON_DIR}/lib/3.11/site-packages" >> ~/.bashrc && \
+    echo "export FIRECROWN_DIR=${DESC_PYTHON_DIR}/lib/3.13/site-packages" >> ~/.bashrc && \
     echo "export COSMOSIS_NO_SUBPROCESS=1" >> ~/.bashrc && \
     echo "export MPI4PY_RC_RECV_MPROBE=0" >> ~/.bashrc && \
     echo "export HDF5_USE_FILE_LOCKING=FALSE" >> ~/.bashrc
@@ -206,7 +206,7 @@ SHELL ["/bin/bash", "--login", "-c"]
 # Build-time sanity checks
 RUN python -c "import firecrown; print('firecrown OK')" && \
     python -c "import mpi4py; print('mpi4py OK:', mpi4py.__version__)" && \
-    mpirun -n 2 python -m mpi4py.bench helloworld
+    mpirun --allow-run-as-root -n 2 python -m mpi4py.bench helloworld
 
 WORKDIR /home/lsst
 
