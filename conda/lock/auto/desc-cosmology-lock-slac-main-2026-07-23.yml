@@ -13,7 +13,7 @@
 version: 1
 metadata:
   content_hash:
-    linux-64: 931f1da22f6c516b700c76bf52dd43c8ede195af6662fa16600f8d7afcad58ec
+    linux-64: 2b6964b720e5937dad9cd134695e48fad6c9ebe48a30653e065193c7948d2ff3
   channels:
   - url: conda-forge/label/mpi-external
     used_env_vars: []
@@ -959,7 +959,7 @@ package:
   category: main
   optional: false
 - name: camb
-  version: 2.0.0
+  version: 1.6.5
   manager: conda
   platform: linux-64
   dependencies:
@@ -975,10 +975,10 @@ package:
     scipy: '>=1.0'
     setuptools: ''
     sympy: '>=1.0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/camb-2.0.0-py313h494722d_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/camb-1.6.5-py313h494722d_1.conda
   hash:
-    md5: 6c448a4e84de2938c96f83b22b0bcad1
-    sha256: 0980a18bd8eb80bf1cbb293fb26b5ce2184ef9474294fd82d592d9c997625cff
+    md5: d35044a53a91535fb15afe6e79bc2878
+    sha256: 22aee26e593cc69fcf2b48a9a5ace54b6654231e469b48c46191b21f71417e76
   category: main
   optional: false
 - name: cdshealpix
