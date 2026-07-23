@@ -11,6 +11,19 @@ Prerequisite: install docker on your laptop (see below)
 * Point your browser to the 3rd URL listed
 * You should find the augur_tutorial under `/home/lsst/work` in Jupyter
 
+## install the environment directly on your laptp
+* git clone https://github.com/LSSTDESC/desc-cosmology-env
+* Download Miniforge
+```
+url="https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+curl -LO "$url"
+bash ./Miniforge3-$(uname)-$(uname -m).sh -b -p $PWD/py
+source $PWD/py/bin/activate
+```
+* Install the environment
+  ```
+conda env create -n cosmology-env -f desc-cosmology-env/slac/env-nobuild-2026-07-23.yml
+```
 
 
 ## Using the desc-cosmology docker image at SLAC S3DF with apptainer
