@@ -28,6 +28,5 @@ dependencies:
   - pip:
     - cobaya
     - derivkit
-    - isitgr
     - lsstdesc-dataregistry
     - pybinny
