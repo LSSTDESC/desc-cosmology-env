@@ -40,6 +40,8 @@ jobs:
           cd $GITHUB_WORKSPACE
           conda install -c conda-forge -y -n lock-env conda-lock
           conda-lock lock -c conda-forge/label/mpi-external -c conda-forge -f ./conda/lock/environment-slac.yml -p linux-64 --lockfile ./conda/lock/auto/desc-cosmology-lock-slac-${{env.BRANCH_NAME}}-${{env.DATE_TAG}}.yml
+          conda-lock lock -c conda-forge/label/mpi-external -c conda-forge -f ./conda/lock/environment-slac.yml -p osx-arm64 --lockfile ./conda/lock/auto/desc-cosmology-lock-slac-osx-arm64-${{env.BRANCH_NAME}}-${{env.DATE_TAG}}.yml
+          conda-lock lock -c conda-forge/label/mpi-external -c conda-forge -f ./conda/lock/environment-slac.yml -p osx-64 --lockfile ./conda/lock/auto/desc-cosmology-lock-slac-osx-64-${{env.BRANCH_NAME}}-${{env.DATE_TAG}}.yml
           
       - name: Commit and push changes
         uses: devops-infra/action-commit-push@v0.11
