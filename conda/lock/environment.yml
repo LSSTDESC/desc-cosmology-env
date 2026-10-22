@@ -8,7 +8,7 @@ dependencies:
   - mamba[version='>=2.1.1']
   - camb<2
   - compilers
-  - cosmosis
+  - cosmosis<3.26
   - cosmosis-build-standard-library
   - diffsky
   - firecrown
