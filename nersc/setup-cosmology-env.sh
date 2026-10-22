@@ -28,6 +28,9 @@ if [ -n "$DESC_COSMO_USERBASE" ]; then
 fi
 
 # For cosmosis and firecrown.  Should try to find a better way to set these
+export FIRECROWN_SITE_PACKAGES=$CONDA_PREFIX/lib/python3.13/site-packages
+export FIRECROWN_DIR=$FIRECROWN_SITE_PACKAGES
+
 #export CSL_DIR=$CONDA_PREFIX/lib/python3.10/site-packages/cosmosis/cosmosis-standard-library
 #export FIRECROWN_SITE_PACKAGES=$CONDA_PREFIX/lib/python3.10/site-packages
 #export FIRECROWN_DIR=$CONDA_PREFIX/firecrown
