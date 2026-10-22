@@ -13,7 +13,7 @@
 version: 1
 metadata:
   content_hash:
-    linux-64: e5cc6fdf880ddb8fed6119b94a5a6f9bf1af28021e162b92f18606f0c3ec25d6
+    linux-64: bde2fe1ff3dae64ac8b8ed98b56842d48c56c038b6798ae0bb1851c6360aa863
   channels:
   - url: conda-forge/label/mpi-external
     used_env_vars: []
@@ -1495,7 +1495,7 @@ package:
   category: main
   optional: false
 - name: cosmosis
-  version: '3.26'
+  version: 3.25.2
   manager: conda
   platform: linux-64
   dependencies:
@@ -1510,15 +1510,15 @@ package:
     git: ''
     h5py: ''
     libblas: '>=3.9.0,<4.0a0'
-    libgcc: '>=15'
+    libgcc: '>=14'
     libgfortran: ''
-    libgfortran5: '>=15.3.0'
+    libgfortran5: '>=14.3.0'
     liblapack: '>=3.9.0,<4.0a0'
-    libstdcxx: '>=15'
+    libstdcxx: '>=14'
     matplotlib-base: ''
     minuit2_standalone: ''
     mpi4py: ''
-    mpich: '>=4.3,<5.0a0'
+    mpich: '>=3.4.3,<5.0a0'
     nautilus-sampler: '>=1.0.1'
     numpy: ''
     pip: ''
@@ -1531,10 +1531,10 @@ package:
     setuptools: ''
     threadpoolctl: ''
     zeus-mcmc: ''
-  url: https://conda.anaconda.org/conda-forge/linux-64/cosmosis-3.26-py313h22eee8e_1.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/cosmosis-3.25.2-py313ha615e6d_2.conda
   hash:
-    md5: 5d18b57c4d4d4545a9222872595d6531
-    sha256: a0c15555d33189b2535d70b653338a4c65b9d2086421b0afbfa331d7e7e92522
+    md5: 82d2a3b0cf0a8ab031f55706e8c5d501
+    sha256: 345a22c7a029cd825e873f074cfce9844fb2a757b55f89051823ea7242a26ca0
   category: main
   optional: false
 - name: cosmosis-build-standard-library
@@ -6142,21 +6142,21 @@ package:
   category: main
   optional: false
 - name: pandas
-  version: 3.0.6
+  version: 3.1.0
   manager: conda
   platform: linux-64
   dependencies:
     __glibc: '>=2.17,<3.0.a0'
     libgcc: '>=15'
     libstdcxx: '>=15'
-    numpy: '>=1.25,<3,>=1.26.0'
+    numpy: '>=1.25,<3,>=2.0.2'
     python: ''
-    python-dateutil: '>=2.8.2'
+    python-dateutil: '>=2.9.0'
     python_abi: 3.13.*
-  url: https://conda.anaconda.org/conda-forge/linux-64/pandas-3.0.6-np2py313h4900a6c_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/pandas-3.1.0-np2py313h4900a6c_0.conda
   hash:
-    md5: 871596bf7cdadf8ccff03437e9b92173
-    sha256: 8a4ee0d733e2c4be00ad3c80a3bc97a28837f611e45e7f4384d061f392827841
+    md5: 63980146007cd958c64b6110949bfccb
+    sha256: e433dce64bf15f03950b8efe1ed5c642bbc107aa603b94a1a847153d5fba6f5b
   category: main
   optional: false
 - name: pandocfilters
@@ -6696,15 +6696,15 @@ package:
   category: main
   optional: false
 - name: pycparser
-  version: '3.11'
+  version: '3.12'
   manager: conda
   platform: linux-64
   dependencies:
     python: '>=3.11'
-  url: https://conda.anaconda.org/conda-forge/noarch/pycparser-3.11-pyh5ded981_0.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/pycparser-3.12-pyh5ded981_0.conda
   hash:
-    md5: 3cd164745122ab557cc30879390089e8
-    sha256: 99af7c6061d7aa73cfcef615500ddf3e9f4a58c844646b7d7ce58147fb5758d7
+    md5: c36e0a9230d1ec9a8959dbcbd7866e6b
+    sha256: 05d0a27eeaa6efc5d97f93ebf02be7d4efce9e01cb4c352e72705e1ae0bb1a2c
   category: main
   optional: false
 - name: pydantic
