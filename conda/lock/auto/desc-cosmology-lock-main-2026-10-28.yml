@@ -13,7 +13,7 @@
 version: 1
 metadata:
   content_hash:
-    linux-64: bde2fe1ff3dae64ac8b8ed98b56842d48c56c038b6798ae0bb1851c6360aa863
+    linux-64: 1a32906e68e93cf81b4e7165bd1f73b4dbc7aa1d24843d8af0c5928a989ccb42
   channels:
   - url: conda-forge/label/mpi-external
     used_env_vars: []
@@ -2347,7 +2347,7 @@ package:
   category: main
   optional: false
 - name: fonttools
-  version: 4.67.0
+  version: 4.68.0
   manager: conda
   platform: linux-64
   dependencies:
@@ -2357,10 +2357,10 @@ package:
     munkres: ''
     python: '>=3.13,<3.14.0a0'
     python_abi: 3.13.*
-  url: https://conda.anaconda.org/conda-forge/linux-64/fonttools-4.67.0-py313h6cd9899_1.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/fonttools-4.68.0-py313h6cd9899_0.conda
   hash:
-    md5: dd719c40c297d87fe93085248d2ff07b
-    sha256: b81de60784d902b27da442aacf9bf8f059b0aa778178a7d453bc654c43457ec1
+    md5: 08e015d6c335f0ba76d84a3195b57005
+    sha256: 1a1842c965a797cd1c8ab68cedaeab95c577ba2953576bfd1c91df70e8eecd21
   category: main
   optional: false
 - name: formulaic
@@ -3653,7 +3653,7 @@ package:
   category: main
   optional: false
 - name: jupyter-builder
-  version: 1.2.3
+  version: 1.2.4
   manager: conda
   platform: linux-64
   dependencies:
@@ -3661,10 +3661,10 @@ package:
     python: '>=3.11'
     tomli: ''
     traitlets: ''
-  url: https://conda.anaconda.org/conda-forge/noarch/jupyter-builder-1.2.3-pyh5ded981_0.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/jupyter-builder-1.2.4-pyh5ded981_0.conda
   hash:
-    md5: bac0e43cada154f38a627bde5e7e6016
-    sha256: 3eba9c6b859a217ad8de382d1af76983611c221364a059bfd379f2f09dd663ef
+    md5: 0c7b1fa39c71f3f7a1a7faa14b49b3d5
+    sha256: ce461fd2fb09595caed97813bcf94eec385dca9784ac78677e14d27b14cab1af
   category: main
   optional: false
 - name: jupyter-lsp
@@ -8884,6 +8884,26 @@ package:
     sha256: 47d682b9f6d6ec9eb1a6e6c3e75ea6273e899e78fb7fc59f81d39745009fbc60
   category: main
   optional: false
+- name: baccoemu
+  version: 2.3.0
+  manager: pip
+  platform: linux-64
+  dependencies:
+    h5py: '*'
+    jax: '*'
+    matplotlib: '*'
+    numpy: '*'
+    packaging: '*'
+    progressbar2: '*'
+    pytest: '*'
+    scipy: '*'
+    setuptools: '*'
+    sphinx-rtd-theme: '*'
+  url: https://files.pythonhosted.org/packages/ec/8e/dc12c37aea6abd2ef3df8f9115e8764ecbd975427141cb39a3f87e30d594/baccoemu-2.3.0-py3-none-any.whl
+  hash:
+    sha256: efa7dd68ed1f12f8a9ced42d4d6a085e3b8ad36abd97abd2ab6d7ebbdf2c187e
+  category: main
+  optional: false
 - name: cmasher
   version: 1.9.4
   manager: pip
@@ -8987,6 +9007,17 @@ package:
     sha256: 8d5eb4ec5017ba2fab4e34a747c6d2c2b6fecfe9e7236e77988db91580ada952
   category: main
   optional: false
+- name: progressbar2
+  version: 4.6.0
+  manager: pip
+  platform: linux-64
+  dependencies:
+    python-utils: '>=3.8.1'
+  url: https://files.pythonhosted.org/packages/70/4c/ba64c450164fa4feaa9c4bb1c6445811d89d6a1995bfc58d039273b698af/progressbar2-4.6.0-py3-none-any.whl
+  hash:
+    sha256: 2d78bdeb1debef92a39dd9042e0689542bd72d6e2f30b13432db371aa9d8ee4e
+  category: main
+  optional: false
 - name: psycopg2
   version: 2.9.13
   manager: pip
@@ -9034,5 +9065,40 @@ package:
   url: https://files.pythonhosted.org/packages/50/ca/44de4e75f8aadc457f0634be3b542815078ded46dca30efb960edeecad6e/pyjwt-2.15.1-py3-none-any.whl
   hash:
     sha256: 42d59d631f7768a1028a64c7ff581a9bf7519804daf91fc5b6c56e30eec5e193
+  category: main
+  optional: false
+- name: python-utils
+  version: 4.1.4
+  manager: pip
+  platform: linux-64
+  dependencies:
+    typing-extensions: '>3.10.0.2'
+  url: https://files.pythonhosted.org/packages/3b/97/4dfe369f4e1eed1f50e7cbfaf5ef5e1fa025e8fa29073290d77d7aea89b1/python_utils-4.1.4-py3-none-any.whl
+  hash:
+    sha256: 009251f6182f872cd4a74225cdf3636f48ee4596532082bd367797c5924d92bf
+  category: main
+  optional: false
+- name: sphinx-rtd-theme
+  version: 3.1.0
+  manager: pip
+  platform: linux-64
+  dependencies:
+    docutils: '>0.18,<0.23'
+    sphinx: '>=6,<10'
+    sphinxcontrib-jquery: '>=4,<5'
+  url: https://files.pythonhosted.org/packages/87/c7/b5c8015d823bfda1a346adb2c634a2101d50bb75d421eb6dcb31acd25ebc/sphinx_rtd_theme-3.1.0-py2.py3-none-any.whl
+  hash:
+    sha256: 1785824ae8e6632060490f67cf3a72d404a85d2d9fc26bce3619944de5682b89
+  category: main
+  optional: false
+- name: sphinxcontrib-jquery
+  version: '4.1'
+  manager: pip
+  platform: linux-64
+  dependencies:
+    sphinx: '>=1.8'
+  url: https://files.pythonhosted.org/packages/76/85/749bd22d1a68db7291c89e2ebca53f4306c3f205853cf31e9de279034c3c/sphinxcontrib_jquery-4.1-py2.py3-none-any.whl
+  hash:
+    sha256: f936030d7d0147dd026a4f2b5a57343d233f1fc7b363f68b3d4f1cb0993878ae
   category: main
   optional: false
