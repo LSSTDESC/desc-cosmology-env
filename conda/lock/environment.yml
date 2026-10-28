@@ -29,6 +29,7 @@ dependencies:
   - scipy<1.18
   - tjpcov
   - pip:
+    - baccoemu
     - cobaya
     - derivkit
     - lsstdesc-dataregistry
