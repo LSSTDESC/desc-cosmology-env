@@ -23,6 +23,7 @@ dependencies:
   - namaster
   - numpy<2.4
   - opencosmo
+  - psycopg
   - psycopg2
   - rubin-sim
   - sacc
