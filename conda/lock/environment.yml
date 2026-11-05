@@ -13,7 +13,7 @@ dependencies:
   - diffsky
   - firecrown>1.16.0
   - ipykernel
-  - isitgr
+  - isitgr=1.6.5=py313h5722dcf_0
   - jupyter
   - lsdb
   - lsstdesc-augur
