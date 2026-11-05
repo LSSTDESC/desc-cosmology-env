@@ -11,7 +11,7 @@ dependencies:
   - cosmosis
   - cosmosis-build-standard-library
   - diffsky
-  - firecrown
+  - firecrown>1.16.0
   - ipykernel
   - isitgr
   - jupyter
